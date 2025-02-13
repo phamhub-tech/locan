@@ -47,7 +47,7 @@
           "Ty": "Int"
         }
       },
-      "nullable": false,
+      "nullable": true,
       "pk": false,
       "auto": false,
       "unique": false,
@@ -58,6 +58,19 @@
       "sqltype": {
         "KnownId": {
           "Ty": "Int"
+        }
+      },
+      "nullable": true,
+      "pk": false,
+      "auto": false,
+      "unique": false,
+      "default": null
+    },
+    {
+      "name": "root_dir",
+      "sqltype": {
+        "KnownId": {
+          "Ty": "Text"
         }
       },
       "nullable": false,

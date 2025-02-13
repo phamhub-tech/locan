@@ -34,9 +34,10 @@
               @click="gotoProject(project.id)"
             >
               <td>
-                <div class="flex items-center gap-x-3 font-semibold">
+                <p class="font-semibold">
                   {{ project.name }}
-                </div>
+								</p>
+								<p class="text-muted-foreground text-xs">{{  project.rootDir }}</p>
               </td>
               <td>{{ project.loc ?? "-" }}</td>
               <td>{{ project.files ?? "-" }}</td>

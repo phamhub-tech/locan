@@ -8,12 +8,14 @@ import {
 
 export class ProjectBase extends BaseModel implements IProjectBase {
 	public name: string;
+	public rootDir: string;
 	public loc: number | null;
 	public files: number | null;
 	constructor(data: IProjectBase) {
 		super(data)
 
 		this.name = data.name
+		this.rootDir = data.rootDir
 		this.loc = data.loc
 		this.files = data.files
 	}
@@ -22,6 +24,7 @@ export class ProjectBase extends BaseModel implements IProjectBase {
 		return {
 			...BaseModel.buildJson(json),
 			name: json.name,
+			rootDir: json.root_dir,
 			loc: json.loc,
 			files: json.files,
 		}
@@ -31,6 +34,7 @@ export class ProjectBase extends BaseModel implements IProjectBase {
 		return {
 			...super.toJson(),
 			name: this.name,
+			root_dir: this.rootDir,
 			loc: this.loc,
 			files: this.files,
 		}

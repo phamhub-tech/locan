@@ -33,8 +33,6 @@ fn add_project(db: State<DBConnection>, name: String) -> Result<ApiResponse<Proj
     let mut project = Project {
         uuid: Uuid::new_v4().to_string(),
         name,
-        loc: 0,
-        files: 0,
         created_at: Utc::now(),
         updated_at: Utc::now(),
         ..Default::default()
@@ -46,6 +44,7 @@ fn add_project(db: State<DBConnection>, name: String) -> Result<ApiResponse<Proj
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 pub fn run() {
     tauri::Builder::default()
+        .plugin(tauri_plugin_dialog::init())
         .setup(|app| {
             let handle = app.handle();
             let conn = db::establish_connection(&handle);

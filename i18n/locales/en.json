@@ -1,5 +1,7 @@
 {
 	"files": "File | Files",
+	"selectProjectRootTitle": "Select project root folder",
+	"browse": "Browse",
 	"status": "Status",
 	"type": "Type",
 	"responses": "Response | Responses",

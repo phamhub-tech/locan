@@ -2,11 +2,13 @@ import type { IBaseModel, IBaseModelJson } from "~/_common/models";
 
 export interface IProjectBaseJson extends IBaseModelJson {
 	name: string
+	root_dir: string
 	loc: number | null
 	files: number | null
 }
 export interface IProjectBase extends IBaseModel {
 	name: string
+	rootDir: string
 	loc: number | null
 	files: number | null
 }

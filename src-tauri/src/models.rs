@@ -11,8 +11,9 @@ pub struct Project {
 
     #[unique]
     pub name: String,
-    pub loc: i32,
-    pub files: i16,
+    pub loc: Option<i32>,
+    pub files: Option<i16>,
+		pub root_dir: String,
 
     pub created_at: DateTime<Utc>,
     pub updated_at: DateTime<Utc>,

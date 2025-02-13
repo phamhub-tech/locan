@@ -9,7 +9,7 @@
         <DialogHeader class="px-4 py-6 bg-white shadow dark:bg-background">
           <DialogTitle>{{ title }}</DialogTitle>
 
-          <div class="space-y-6">
+          <div class="space-y-4 pt-4">
             <slot />
           </div>
         </DialogHeader>
