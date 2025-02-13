@@ -4,6 +4,7 @@ pub mod db;
 pub mod models;
 
 use api::ApiError;
+use butane::colname;
 use butane::prelude::*;
 use butane::DataResult;
 use chrono::Utc;
@@ -19,6 +20,7 @@ fn get_projects(db: State<DBConnection>) -> Result<ApiResponse<Vec<Project>>, Ap
     let conn_guard = db.conn.lock().map_err(|e| api_error!(e.to_string()))?;
     let conn = &*conn_guard;
     let projects = Project::query()
+        .order_desc(colname!(Project, updated_at))
         .load(conn)
         .map_err(|e| api_error!(e.to_string()))?;
 
@@ -26,13 +28,14 @@ fn get_projects(db: State<DBConnection>) -> Result<ApiResponse<Vec<Project>>, Ap
 }
 
 #[tauri::command]
-fn add_project(db: State<DBConnection>, name: String) -> Result<ApiResponse<Project>, ApiError> {
+fn add_project(db: State<DBConnection>, name: String, root_dir: String) -> Result<ApiResponse<Project>, ApiError> {
     let conn_guard = db.conn.lock().map_err(|e| api_error!(e.to_string()))?;
     let conn = &*conn_guard;
 
     let mut project = Project {
         uuid: Uuid::new_v4().to_string(),
         name,
+        root_dir,
         created_at: Utc::now(),
         updated_at: Utc::now(),
         ..Default::default()

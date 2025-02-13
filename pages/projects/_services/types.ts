@@ -1,3 +1,4 @@
 export interface IProjectAddPayload {
-	name: string
+	name: string;
+	rootDir: string;
 }

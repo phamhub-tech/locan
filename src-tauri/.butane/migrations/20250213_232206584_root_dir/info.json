@@ -1,0 +1,6 @@
+{
+  "from_name": "20250213_205624544_init",
+  "backends": [
+    "sqlite"
+  ]
+}

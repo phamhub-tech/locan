@@ -71,6 +71,7 @@ const form = useForm({ validationSchema: formSchema, validateOnMount: false });
 const onSubmit = form.handleSubmit(async (values) => {
 	await store.addProject({
 		name: values.name,
+		rootDir: values.rootDir,
 	});
 
 	isOpen.value = false;
