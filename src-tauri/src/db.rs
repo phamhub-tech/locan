@@ -1,4 +1,4 @@
-use std::{fs::File, sync::Mutex};
+use std::{fs, fs::File, sync::Mutex};
 
 use butane::db::{Connection, ConnectionSpec};
 use tauri::{AppHandle, Manager};
@@ -19,7 +19,14 @@ pub fn establish_connection(handle: &AppHandle) -> DBConnection {
     let db_path = path.join("locan.db");
     println!("DB path: {:?}", db_path);
     if !db_path.exists() {
+				if !path.exists() {
+					println!("App Data directory not found, creating...");
+					fs::create_dir_all(path).expect("Could not create data directory");
+					println!("App Data directory created")
+				}
+
         File::create_new(&db_path).expect("DB file could not be created");
+				println!("Created database file")
     }
 
     let mut connection = butane::db::connect(
@@ -28,7 +35,7 @@ pub fn establish_connection(handle: &AppHandle) -> DBConnection {
             db_path.into_os_string().into_string().unwrap(),
         ), //&ConnectionSpec::load(".butane/connection.json").unwrap()
     )
-    .unwrap();
+    .expect("Could not create database connection");
     let migrations = butane_migrations::get_migrations().unwrap();
     migrations.migrate(&mut connection).unwrap();
 
