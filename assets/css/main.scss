@@ -1,0 +1,84 @@
+@use 'base';
+
+@layer base {
+  * {
+    @apply border-border;
+
+    &:focus-visible {
+      @apply outline-none ring ring-primary/50 #{!important};
+    }
+  }
+
+  html,
+  body {
+    font-size: 16px;
+    @apply font-sans tracking-wide selection:bg-primary selection:text-white;
+    @apply scroll-smooth bg-background text-foreground;
+  }
+
+  a.link {
+    @apply relative;
+
+    &:focus {
+      @apply ring-0 #{!important};
+    }
+
+    &::after {
+      content: '';
+      @apply absolute w-full left-0 -bottom-1 h-[2px];
+      @apply bg-primary scale-x-50 opacity-0 transition-[transform,_opacity];
+
+    }
+
+    &:focus-visible,
+    &:hover {
+      &::after {
+        @apply scale-x-100 opacity-100 duration-500;
+      }
+    }
+  }
+
+  table:not(.default) {
+    th,
+    td {
+      padding: 0.5rem;
+    }
+  }
+}
+
+@layer utilities {
+  .container {
+    @apply px-4 !max-w-[1400px] mx-auto;
+  }
+  
+  .fade {
+    &-enter-from,
+    &-leave-to {
+      @apply opacity-0;
+    }
+
+    &-enter-to,
+    &-leave-from {
+      @apply opacity-100;
+    }
+
+    &-enter-active,
+    &-leave-active {
+      @apply transition-opacity duration-300;
+    }
+  }
+
+  .grid-centered {
+    @apply grid place-items-center;
+  }
+
+  .text {
+    &__h1 {
+      @apply font-bold text-2xl;
+    }
+
+    &__h2 {
+      @apply font-light text-xl;
+    }
+  }
+}

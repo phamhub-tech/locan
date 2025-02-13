@@ -1,0 +1,4 @@
+{
+  "backend_name": "sqlite",
+  "conn_str": "locan.db"
+}
