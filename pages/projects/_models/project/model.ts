@@ -9,19 +9,21 @@ import {
 export class ProjectBase extends BaseModel implements IProjectBase {
 	public name: string;
 	public loc: number | null;
+	public files: number | null;
 	constructor(data: IProjectBase) {
 		super(data)
 
 		this.name = data.name
 		this.loc = data.loc
+		this.files = data.files
 	}
 
 	protected static buildData(json: IProjectBaseJson): IProjectBase {
-
 		return {
 			...BaseModel.buildJson(json),
 			name: json.name,
 			loc: json.loc,
+			files: json.files,
 		}
 	}
 
@@ -30,6 +32,7 @@ export class ProjectBase extends BaseModel implements IProjectBase {
 			...super.toJson(),
 			name: this.name,
 			loc: this.loc,
+			files: this.files,
 		}
 	}
 }

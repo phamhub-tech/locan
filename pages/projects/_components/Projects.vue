@@ -5,6 +5,7 @@
         <tr>
           <th>{{ $t("name") }}</th>
           <th>{{ $t("loc") }}</th>
+          <th>{{ $t("files", 2) }}</th>
           <th>{{ $t("updated") }}</th>
           <th>{{ $t("created") }}</th>
         </tr>
@@ -38,6 +39,7 @@
                 </div>
               </td>
               <td>{{ project.loc ?? "-" }}</td>
+              <td>{{ project.files ?? "-" }}</td>
               <td>{{ format(project.updatedAt, "dd MMM yyyy") }}</td>
               <td>{{ format(project.createdAt, "dd MMM yyyy") }}</td>
             </tr>
