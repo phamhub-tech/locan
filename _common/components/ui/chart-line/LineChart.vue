@@ -1,5 +1,4 @@
-<script setup lang="ts" generic="T extends Record<string, any>">
-import type { BaseChartProps } from '.'
+<script setup lang="ts" generic="T extends Record<string, any>"> import type { BaseChartProps } from '.'
 import { ChartCrosshair, ChartLegend, defaultColors } from '@/_common/components/ui/chart'
 import { cn } from '@/_common/utils'
 import { type BulletLegendItemInterface, CurveType } from '@unovis/ts'
@@ -82,6 +81,7 @@ function handleLegendItemClick(d: BulletLegendItemInterface, i: number) {
         :tick-format="xFormatter ?? ((v: number) => data[v]?.[index])"
         :grid-line="false"
         :tick-line="false"
+				:tick-values="Array(data.length).fill(null).map((_, i) => i)"
         tick-text-color="hsl(var(--vis-text-color))"
       />
       <VisAxis

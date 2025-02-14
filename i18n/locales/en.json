@@ -75,8 +75,11 @@
 	"name": "Name",
 	"noProjects": "You have not created any projects",
 	"lastScan": "Last scan",
-	"scan": "Scan",
+	"scans": "Scan | Scans",
 	"newScan": "New scan",
+	"thisMonth": "This month",
+	"thisYear": "This year",
+	"noScans": "No scans to show",
 
 	"created": "Created",
 	"myProfile": "My Profile",

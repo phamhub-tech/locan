@@ -2,7 +2,7 @@
   <Status v-if="apiHandle.isError.value" variant="error" @retry="getProject">
     {{ apiMsg }}
   </Status>
-  <div v-else-if="project" class="space-y-4">
+  <div v-else-if="project" class="space-y-6">
     <div class="space-y-2">
       <section class="flex items-center justify-between">
         <h1 class="text__h1">{{ project.name }}</h1>
@@ -24,6 +24,10 @@
         </div>
       </section>
     </div>
+
+		<div>
+			<LocTrend />
+		</div>
   </div>
 </template>
 
@@ -35,6 +39,7 @@ import { useProjectsStore } from "../_store/projects";
 import ProjectScan from "./_components/ProjectScan.vue";
 import Status from "~/_common/components/Status.vue";
 import { humanizeDate } from "~/_common/utils";
+import LocTrend from "./_components/loc/LocTrend.vue";
 
 definePageMeta({ name: "project-details" });
 

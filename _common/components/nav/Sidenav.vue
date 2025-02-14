@@ -1,5 +1,5 @@
 <template>
-  <aside class="sticky h-screen group duration-300 w-[280px]">
+  <aside class="sticky h-screen group duration-300 w-60">
     <div
       :class="[
         'relative flex flex-col h-full w-4/5 max-w-xs transition-transform duration-inherit',
