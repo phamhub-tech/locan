@@ -18,7 +18,10 @@
     </div>
 
     <div class="space-y-4">
-      <LocChart :data="data" />
+      <div class="grid xl:grid-cols-3 gap-4">
+        <LocChart :data="data" class="xl:col-span-2" />
+        <LocFiles />
+      </div>
     </div>
   </div>
 </template>
@@ -35,7 +38,14 @@ import { DropdownButton, DropdownItem } from "~/_common/components/dropdown";
 import { TDuration, type ILocScanChartData } from "../../_types";
 
 import LocChart from "./LocChart.vue";
-import { format, startOfMonth, startOfYear, subDays, subMonths } from "date-fns";
+import {
+  format,
+  startOfMonth,
+  startOfYear,
+  subDays,
+  subMonths,
+} from "date-fns";
+import LocFiles from "./LocFiles.vue";
 
 const scans = [
   {
