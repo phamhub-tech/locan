@@ -29,9 +29,9 @@
           <template v-if="projects?.length">
             <tr
               v-for="project of projects"
-              :key="`project-${project.id}`"
+              :key="`project-${project.uuid}`"
               class="group"
-              @click="gotoProject(project.id)"
+              @click="gotoProject(project.uuid)"
             >
               <td>
                 <p class="font-semibold">
@@ -57,26 +57,11 @@
 </template>
 
 <script setup lang="ts">
-import {
-  ArchiveIcon,
-  CopyIcon,
-  EllipsisIcon,
-  PencilIcon,
-  Trash2Icon,
-} from "lucide-vue-next";
 import { format } from "date-fns";
 
 import { TextLoader } from "~/_common/components/loaders/text";
-import { Button } from "~/_common/components/ui/button";
-import {
-  DropdownMenu,
-  DropdownMenuTrigger,
-} from "~/_common/components/ui/dropdown-menu";
 import { useApiHandle } from "~/_common/core/api/composables";
 import Status from "~/_common/components/Status.vue";
-import DropdownMenuContent from "~/_common/components/ui/dropdown-menu/DropdownMenuContent.vue";
-import DropdownMenuItem from "~/_common/components/ui/dropdown-menu/DropdownMenuItem.vue";
-import { Label } from "~/_common/components/ui/label";
 import { getRouteName } from "~/_common/utils";
 import { FadeTransition } from "~/_common/components/transitions";
 
@@ -95,10 +80,10 @@ function getProjects() {
   store.getProjects();
 }
 
-function gotoProject(id: number) {
+function gotoProject(uuid: string) {
   return navigateTo({
     name: getRouteName("project-details"),
-    params: { id },
+    params: { uuid },
   });
 }
 </script>

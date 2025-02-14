@@ -2,19 +2,6 @@
   "name": "Project",
   "columns": [
     {
-      "name": "id",
-      "sqltype": {
-        "KnownId": {
-          "Ty": "Int"
-        }
-      },
-      "nullable": false,
-      "pk": true,
-      "auto": true,
-      "unique": false,
-      "default": null
-    },
-    {
       "name": "uuid",
       "sqltype": {
         "KnownId": {
@@ -22,7 +9,7 @@
         }
       },
       "nullable": false,
-      "pk": false,
+      "pk": true,
       "auto": false,
       "unique": true,
       "default": null

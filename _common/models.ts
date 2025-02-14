@@ -1,28 +1,28 @@
 export interface IBaseModelJson {
-	id: number;
+	uuid: string;
 	created_at: string
 	updated_at: string
 }
 export interface IBaseModel {
-	id: number;
+	uuid: string;
 	createdAt: Date
 	updatedAt: Date
 }
 
 export class BaseModel implements IBaseModel {
-	public id: number;
+	public uuid: string;
 	public createdAt: Date;
 	public updatedAt: Date;
 
 	constructor(data: IBaseModel) {
-		this.id = data.id
+		this.uuid = data.uuid
 		this.createdAt = data.createdAt
 		this.updatedAt = data.updatedAt
 	}
 
 	protected static buildJson(json: IBaseModelJson): IBaseModel {
 		return {
-			id: json.id,
+			uuid: json.uuid,
 			createdAt: new Date(json.created_at),
 			updatedAt: new Date(json.updated_at),
 		}
@@ -30,7 +30,7 @@ export class BaseModel implements IBaseModel {
 
 	toJson(): IBaseModelJson {
 		return {
-			id: this.id,
+			uuid: this.uuid,
 			created_at: this.createdAt.toISOString(),
 			updated_at: this.updatedAt.toISOString(),
 		}

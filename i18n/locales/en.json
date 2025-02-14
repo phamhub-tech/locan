@@ -74,6 +74,9 @@
 	"allTime": "All Time",
 	"name": "Name",
 	"noProjects": "You have not created any projects",
+	"lastScan": "Last scan",
+	"scan": "Scan",
+	"newScan": "New scan",
 
 	"created": "Created",
 	"myProfile": "My Profile",

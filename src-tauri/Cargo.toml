@@ -26,4 +26,6 @@ butane = { version = "0.7.0", features = ["sqlite", "sqlite-bundled"] }
 chrono = "0.4.39"
 uuid = { version = "1.13.1", features = ["v4"] }
 tauri-plugin-dialog = "2"
+file-format = { version = "0.26.0", features = ["reader-txt"] }
+walkdir = "2.5.0"
 

@@ -33,7 +33,7 @@ const props = withDefaults(defineProps<Props>(), {
 
 <style lang="css" scoped>
 .btn {
-  @apply relative transition-colors overflow-hidden;
+  @apply relative transition-colors duration-300 overflow-hidden;
 
   &:after {
     content: "";

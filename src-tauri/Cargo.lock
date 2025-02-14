@@ -1106,6 +1106,12 @@ dependencies = [
 ]
 
 [[package]]
+name = "file-format"
+version = "0.26.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "e7ef3d5e8ae27277c8285ac43ed153158178ef0f79567f32024ca8140a0c7cd8"
+
+[[package]]
 name = "flate2"
 version = "1.0.35"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -2176,6 +2182,7 @@ version = "0.1.0"
 dependencies = [
  "butane",
  "chrono",
+ "file-format",
  "serde",
  "serde_json",
  "tauri",
@@ -2183,6 +2190,7 @@ dependencies = [
  "tauri-plugin-dialog",
  "tauri-plugin-opener",
  "uuid",
+ "walkdir",
 ]
 
 [[package]]

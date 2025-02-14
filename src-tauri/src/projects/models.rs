@@ -5,7 +5,7 @@ use serde::Serialize;
 #[model]
 #[derive(Debug, Default, Serialize)]
 pub struct Project {
-    pub id: AutoPk<i32>,
+    #[pk]
     #[unique]
     pub uuid: String,
 
