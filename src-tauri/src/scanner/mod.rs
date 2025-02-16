@@ -164,7 +164,7 @@ pub fn scan_project(
             id: AutoPk::uninitialized(),
             scan: ForeignKey::from_pk(scan.id),
             file_type: file_type_from_extension(&extension),
-            extension: extension,
+            extension,
             loc: a.loc,
             files: a.files as i16,
             created_at: scan.scanned_at,

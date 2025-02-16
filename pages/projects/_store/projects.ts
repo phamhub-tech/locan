@@ -126,16 +126,21 @@ export const useProjectsStore = defineStore('projects', {
 				const scan = ScanResultModel.fromJson(data.scan)
 
 				this.projectScanResults = data
-				if (this.project?.rootDir === uuid) {
+				if (this.project?.uuid === uuid) {
 					const project = this.project;
 
 					project.loc = scan.loc
 					project.files = scan.files
 					project.scans = (project.scans ?? 0) + 1
 					project.lastScan = scan.scannedAt
+
+					this.projectScanFiles = data
+						.files
+						.map(ScanFileModel.fromJson)
+						.sort(({ loc: locA }, { loc: locB }) => locB - locA)
 				}
 				if (this.projects !== null) {
-					const project = this.projects.find((p) => p.rootDir == uuid);
+					const project = this.projects.find((p) => p.uuid == uuid);
 					if (project) {
 						project.loc = scan.loc
 						project.files = scan.files
@@ -143,6 +148,7 @@ export const useProjectsStore = defineStore('projects', {
 						project.lastScan = scan.scannedAt
 					}
 				}
+
 
 				this.projectScanResultsApiStatus = TApiStatus.success
 			} catch (e) {
