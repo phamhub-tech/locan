@@ -19,7 +19,7 @@
 
     <div class="space-y-4">
       <div class="grid xl:grid-cols-3 gap-4">
-        <LocChart :scans="projectScans" class="xl:col-span-2" />
+        <LocChart :scans="data" class="xl:col-span-2" />
         <LocFiles :data="latestFiles" />
       </div>
     </div>
@@ -49,6 +49,8 @@ import {
 } from "date-fns";
 import LocFiles from "./LocFiles.vue";
 import { useApiHandle } from "~/_common/core/api/composables";
+import type { ScanResultModel } from "~/pages/projects/_models/scan";
+import { a } from "vitest/dist/chunks/suite.B2jumIFP.js";
 
 const props = defineProps<{ uuid: string }>();
 
@@ -57,65 +59,26 @@ const {
   projectScansApiStatus: apiStatus,
   projectScansApiMsg: apiMsg,
   projectScans,
+  projectScanFiles,
 } = storeToRefs(store);
 const apiHandle = useApiHandle(apiStatus);
 
-interface ILocScan {
-  loc: number;
-  date: Date;
-}
+const latestFiles = computed<ILocScanFile[]>(() => {
+	const files = projectScanFiles.value;
+	if (files === null) return [];
 
-const scans: ILocScan[] = [
-  {
-    loc: 506,
-    date: subMonths(new Date(), 2),
-  },
-  {
-    loc: 606,
-    date: subMonths(new Date(), 2),
-  },
-  {
-    loc: 816,
-    date: subMonths(new Date(), 1),
-  },
-  {
-    loc: 710,
-    date: subDays(new Date(), 9),
-  },
-  {
-    loc: 730,
-    date: subDays(new Date(), 2),
-  },
-  {
-    loc: 717,
-    date: subDays(new Date(), 1),
-  },
-  {
-    loc: 745,
-    date: new Date(),
-  },
-];
-
-const latestFiles: ILocScanFile[] = [
-  {
-    icon: "/icons/vue.svg",
-    file: TFileType.vue,
-    loc: 500,
-  },
-  {
-    icon: "/icons/rust.svg",
-    file: TFileType.rust,
-    loc: 40,
-  },
-  {
-    icon: "/icons/typescript.svg",
-    file: TFileType.ts,
-    loc: 205,
-  },
-].sort(({ loc: locA }, { loc: locB }) => locB - locA);
+	return files.map((f) => ({
+		icon: `/icons/${f.fileType}.svg`,
+		file: f.fileType as any,
+		loc: f.loc,
+	}))
+})
 
 const selectedDuration = ref(TDuration.thisMonth);
-const filteredScans = computed<[string, ILocScan[]]>(() => {
+const filteredScans = computed<[string, ScanResultModel[]] | null>(() => {
+  const scans = projectScans.value;
+  if (scans === null) return null;
+
   const selected = selectedDuration.value;
 
   let formatKey = "MMM yyyy";
@@ -123,19 +86,22 @@ const filteredScans = computed<[string, ILocScan[]]>(() => {
   if (selected === TDuration.thisMonth) {
     formatKey = "eee do";
     const earliest = startOfMonth(new Date());
-    filteredScans = scans.filter((s) => s.date >= earliest);
+    filteredScans = scans.filter((s) => s.scannedAt >= earliest);
   } else if (selected === TDuration.thisYear) {
     const earliest = startOfYear(new Date());
-    filteredScans = scans.filter((s) => s.date >= earliest);
+    filteredScans = scans.filter((s) => s.scannedAt >= earliest);
   }
 
   return [formatKey, filteredScans];
 });
 const data = computed<ILocScanChartData[]>(() => {
   const dMap: Record<string, number> = {};
-  const [formatKey, scans] = filteredScans.value;
+  const filtered = filteredScans.value;
+  if (filtered === null) return [];
+
+  const [formatKey, scans] = filtered;
   for (const scan of scans) {
-    let key = format(scan.date, formatKey);
+    let key = format(scan.scannedAt, formatKey);
     const loc = dMap[key] as number | undefined;
 
     if (loc === undefined) {
@@ -151,7 +117,7 @@ const data = computed<ILocScanChartData[]>(() => {
   }));
 });
 
-getScans()
+getScans();
 function getScans() {
   store.getProjectScans(props.uuid);
 }

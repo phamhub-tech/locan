@@ -8,19 +8,18 @@
     <LineChart
       v-if="scans?.length"
       :data="scans"
-      :categories="['loc']"
+      :categories="['value']"
       :show-legend="false"
-      index="loc"
+      index="label"
       class="h-full"
     />
-
     <p v-else class="text-muted-foreground">{{ $t("noScans") }}</p>
   </div>
 </template>
 
 <script setup lang="ts">
 import { LineChart } from "~/_common/components/ui/chart-line";
-import type { ScanResultModel } from "~/pages/projects/_models/scan";
+import type { ILocScanChartData } from "../../_types";
 
-defineProps<{ scans: ScanResultModel[] | null }>();
+defineProps<{ scans: ILocScanChartData[] | null }>();
 </script>

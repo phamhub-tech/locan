@@ -1,4 +1,4 @@
-import type { IScanResultJson } from "../_models/scan";
+import type { IScanFileJson, IScanResultJson } from "../_models/scan";
 
 export interface IProjectAddPayload {
 	name: string;
@@ -7,10 +7,10 @@ export interface IProjectAddPayload {
 
 export interface IProjectScansResponse {
 	scans: IScanResultJson[],
-	files: [],
+	files: IScanFileJson[],
 }
 
 export interface IProjectScanResult {
 	scan: IScanResultJson,
-	files: []
+	files: IScanFileJson[]
 }

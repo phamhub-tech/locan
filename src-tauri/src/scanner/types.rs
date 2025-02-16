@@ -20,19 +20,3 @@ pub struct ScansResponse {
     pub scans: Vec<ScanResult>,
     pub files: Vec<ScanFile>,
 }
-
-#[derive(Debug, Clone, Copy, PartialEq, Eq)]
-pub enum FileType {
-    Rust,
-    Vue,
-    Unknown,
-}
-impl FileType {
-    fn from_extension(extension: &str) -> Self {
-        match extension {
-            "rs" => FileType::Rust,
-            "vue" => FileType::Vue,
-            _ => FileType::Unknown,
-        }
-    }
-}

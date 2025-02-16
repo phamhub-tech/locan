@@ -11,8 +11,15 @@ pub fn get_entry_path(entry: &walkdir::DirEntry) -> String {
 /// Return the file type from the extension
 pub fn file_type_from_extension(extension: &str) -> String {
     match extension {
+        "md" => "markdown",
+        "gitignore" => "gitignore",
+        "js" => "javascript",
+        "json" => "json",
         "rs" => "rust",
+        "toml" => "toml",
+        "ts" => "typescript",
         "vue" => "vue",
+        "yaml" | "yml" => "yaml",
         _ => "unknown"
     }.to_string()
 }
