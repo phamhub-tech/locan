@@ -1,20 +1,16 @@
 <template>
-  <aside class="sticky h-screen group duration-300 w-60">
+  <aside class="group duration-300 w-60">
     <div
       :class="[
         'relative flex flex-col h-full w-4/5 max-w-xs transition-transform duration-inherit',
         'md:w-full md:max-w-none',
         'dark:bg-surface md:dark:bg-surface-dark/50 md:dark:border-transparent space-y-6',
         'dark:bg-toolbar-background',
-				'py-6 px-4',
+        'p-4',
       ]"
     >
-      <div class="flex items-center justify-between">
-        <AppLogo />
-        <ThemeButton />
-      </div>
       <Transition name="fade-fast" mode="out-in">
-        <div class="flex-1 flex flex-col text-sm gap-y-6 max-sm:mt-3">
+        <div class="flex-1 flex flex-col text-sm gap-y-4 max-sm:mt-3">
           <div
             v-for="(group, g) of groupedRoutes"
             :key="`sidenav-link-group-${g}`"
@@ -68,7 +64,7 @@
                   }
                 "
               >
-                <component :is="r.icon" class="w-[21px] shrink-0 opacity-40" />
+                <component :is="r.icon" class="w-[21px] shrink-0 opacity-60" />
                 <span class="flex-1 whitespace-nowrap font-semibold">
                   {{ r.name }}
                 </span>
@@ -76,8 +72,23 @@
             </RouterLink>
           </div>
 
-          <div class="mt-auto space-y-6">
+          <hr class="mt-auto" />
+          <div class="space-y-6">
             <div class="space-y-1">
+              <ThemeButton
+                v-slot="{ icon }"
+                as="div"
+                :class="[
+                  'relative cursor-pointer flex items-center space-x-3 border border-transparent',
+                  ' overflow-hidden rounded-[6px] p-2 transition-all',
+                  'hover:bg-black/5 dark:hover:bg-white/5',
+                ]"
+              >
+                <component :is="icon" class="w-[21px] shrink-0 opacity-60" />
+                <span class="flex-1 whitespace-nowrap font-semibold">
+                  {{ $t("theme") }}
+                </span>
+              </ThemeButton>
               <RouterLink
                 v-for="(r, i) of auxRoutes"
                 v-slot="{ isActive, isExactActive, navigate }"
@@ -91,7 +102,7 @@
                   :class="[
                     'relative cursor-pointer flex items-center space-x-3 border border-transparent',
                     ' overflow-hidden rounded-[6px] p-2 transition-all',
-										'hover:bg-black/5 dark:hover:bg-white/5',
+                    'hover:bg-black/5 dark:hover:bg-white/5',
                     {
                       [linkActiveClass]: r.useExact ? isExactActive : isActive,
                     },
@@ -105,7 +116,7 @@
                 >
                   <component
                     :is="r.icon"
-                    class="w-[21px] shrink-0 opacity-40"
+                    class="w-[21px] shrink-0 opacity-60"
                   />
                   <span class="flex-1 whitespace-nowrap font-semibold">
                     {{ r.name }}
@@ -126,14 +137,13 @@ import { RouterLink, type RouteLocationRaw } from "vue-router";
 import { useI18n } from "vue-i18n";
 import {
   CircleHelpIcon as HelpIcon,
-  HomeIcon,
+  BriefcaseBusinessIcon as ProjectsIcon,
   UserRoundIcon as UserIcon,
   SlidersVertical as SettingsIcon,
 } from "lucide-vue-next";
 
 import { cn, getRouteName } from "~/_common/utils";
 
-import AppLogo from "../logo/AppLogo.vue";
 import ThemeButton from "./ThemeButton.vue";
 
 const props = withDefaults(defineProps<{ modelValue: boolean }>(), {
@@ -152,7 +162,7 @@ const isMinimised = computed(() => props.modelValue);
 const i18n = useI18n();
 
 interface IRoute {
-  icon: typeof HomeIcon;
+  icon: Component;
   name: string;
   route: RouteLocationRaw;
   useExact?: boolean;
@@ -166,7 +176,7 @@ const groupedRoutes = computed<IGroupedRoute[]>(() => {
   const defaultRoutes: IGroupedRoute = {
     routes: [
       {
-        icon: HomeIcon,
+        icon: ProjectsIcon,
         name: i18n.t("projects", 2),
         route: { name: getRouteName("projects") },
       },

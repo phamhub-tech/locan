@@ -1,6 +1,9 @@
 <template>
   <div class="flex">
-    <Sidenav v-model="sidenavMinimised" class="h-screen shrink-0 z-20" />
+    <Sidenav
+      v-model="sidenavMinimised"
+      class="sticky top-0 h-screen shrink-0 z-20"
+    />
 
     <main
       :class="[

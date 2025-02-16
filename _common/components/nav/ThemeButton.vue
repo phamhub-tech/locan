@@ -1,11 +1,15 @@
 <template>
-  <Button variant="ghost" size="icon" @click="toggle">
-    <component :is="icon" />
-  </Button>
+  <component :is="as" variant="ghost" size="icon" @click="toggle">
+    <slot :icon="icon">
+      <component :is="icon" />
+    </slot>
+  </component>
 </template>
 
 <script setup lang="ts">
 import { MonitorIcon, MoonIcon, SunIcon } from "lucide-vue-next";
+
+defineProps<{as: string | Component}>()
 
 const colorMode = useColorMode();
 const icon = computed(() => {
