@@ -35,6 +35,7 @@ async function scanProject() {
     toast({
       title: i18n.t("error"),
       description: apiMsg.value,
+      variant: "destructive",
     });
   }
 }

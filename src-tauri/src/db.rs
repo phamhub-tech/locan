@@ -1,9 +1,9 @@
 use std::{fs, fs::File, sync::Mutex};
 
 use butane::db::{Connection, ConnectionSpec};
-use tauri::{AppHandle, Manager};
+use tauri::AppHandle;
 
-use crate::butane_migrations;
+use crate::{butane_migrations, utils::get_app_data_dir};
 
 pub struct DBConnection {
     pub conn: Mutex<Connection>,
@@ -12,10 +12,7 @@ pub struct DBConnection {
 pub fn establish_connection(handle: &AppHandle) -> DBConnection {
     use butane::migrations::Migrations;
 
-    let path = handle
-        .path()
-        .app_data_dir()
-        .expect("Could not get data directory");
+    let path = get_app_data_dir(handle);
     let db_path = path.join("locan.db");
     if !db_path.exists() {
         if !path.exists() {

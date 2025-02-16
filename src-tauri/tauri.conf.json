@@ -15,7 +15,7 @@
         "title": "Locan",
         "width": 1000,
         "height": 600,
-				"minWidth": 800,
+				"minWidth": 1000,
 				"minHeight": 600
       }
     ],

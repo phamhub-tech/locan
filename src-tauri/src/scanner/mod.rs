@@ -7,6 +7,7 @@ use std::{
     fs::File,
     io::{self, BufRead},
     path::Path,
+    sync::Mutex,
 };
 
 use butane::{colname, query, AutoPk, DataObject, Error, ForeignKey};
@@ -17,12 +18,13 @@ use tauri::State;
 use types::LocAnalysis;
 use walkdir::WalkDir;
 
-use utils::{file_type_from_extension, get_entry_path};
+use utils::{file_type_from_extension, get_entry_name, get_entry_path};
 
 use crate::{
     api::{ApiError, ApiResponse},
     db::DBConnection,
     projects::models::Project,
+    settings::models::AppSettings,
 };
 use crate::{api_error, api_response};
 
@@ -99,6 +101,7 @@ pub fn get_project_scans(
 #[tauri::command]
 pub fn scan_project(
     db: State<DBConnection>,
+    app_settings: State<Mutex<AppSettings>>,
     uuid: String,
 ) -> Result<ApiResponse<ScanResponse>, ApiError> {
     let conn_guard = db.conn.lock().map_err(|e| api_error!(e.to_string()))?;
@@ -113,6 +116,7 @@ pub fn scan_project(
     let mut analysis = HashMap::<String, LocAnalysis>::new();
 
     println!("Scanning {root_dir}");
+    let scan_settings = &app_settings.lock().expect("Couldn't lock settings").scan;
     loop {
         let entry = match walker.next() {
             None => break,
@@ -126,11 +130,25 @@ pub fn scan_project(
         }
 
         if entry.file_type().is_dir() {
+            let entry_name = get_entry_name(&entry);
+            if scan_settings.ignore_dirs.contains(&entry_name.to_string()) {
+                println!("Skipping directory {entry_path}");
+                walker.skip_current_dir();
+            }
+
             continue;
         }
 
         let ext = entry_path.split(".").last();
         if let Some(extension) = ext {
+            if scan_settings
+                .ignore_extensions
+                .contains(&extension.to_string())
+            {
+                println!("Skipping extension {extension}: {entry_path}");
+                continue;
+            }
+
             match analyze_loc_for_file(&entry_path) {
                 Some(result) => match analysis.get_mut(extension) {
                     Some(a) => {

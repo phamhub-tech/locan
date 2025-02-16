@@ -18,6 +18,7 @@ pub fn file_type_from_extension(extension: &str) -> String {
         "rs" => "rust",
         "toml" => "toml",
         "ts" => "typescript",
+        "txt" => "Text",
         "vue" => "vue",
         "yaml" | "yml" => "yaml",
         _ => "unknown"
