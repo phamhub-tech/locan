@@ -18,9 +18,10 @@ pub struct ScanResult {
 
 #[model]
 #[derive(Debug, Serialize)]
-pub struct ScanFileType {
+pub struct ScanFile {
     pub id: AutoPk<i32>,
     pub scan: ForeignKey<ScanResult>,
+    pub extension: String,
     pub file_type: String,
 
     pub loc: i32,

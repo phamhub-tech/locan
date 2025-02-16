@@ -9,15 +9,15 @@ use std::{
     path::Path,
 };
 
-use butane::{AutoPk, DataObject, Error, ForeignKey};
+use butane::{colname, query, AutoPk, DataObject, Error, ForeignKey};
 use chrono::Utc;
 use file_format::FileFormat;
-use models::{ScanFileType, ScanResult};
+use models::{ScanFile, ScanResult};
 use tauri::State;
 use types::LocAnalysis;
 use walkdir::WalkDir;
 
-use utils::get_entry_path;
+use utils::{file_type_from_extension, get_entry_path};
 
 use crate::{
     api::{ApiError, ApiResponse},
@@ -26,7 +26,7 @@ use crate::{
 };
 use crate::{api_error, api_response};
 
-use self::types::ScanResponse;
+use self::types::{ScanResponse, ScansResponse};
 
 fn read_lines<P: AsRef<Path>>(file_path: P) -> io::Result<io::Lines<io::BufReader<File>>> {
     let file = File::open(file_path)?;
@@ -69,13 +69,39 @@ fn analyze_loc_for_file<P: AsRef<Path>>(file_path: P) -> Option<LocAnalysis> {
 }
 
 #[tauri::command]
+pub fn get_project_scans(
+    db: State<DBConnection>,
+    uuid: String,
+) -> Result<ApiResponse<ScansResponse>, ApiError> {
+    let conn_guard = db.conn.lock().map_err(|e| api_error!(e.to_string()))?;
+    let conn = &*conn_guard;
+
+    let scans = query!(ScanResult, project.matches(uuid == { uuid }))
+        .order_asc(colname!(ScanResult, scanned_at))
+        .load(conn)
+        .map_err(|e| api_error!(e.to_string()))?;
+
+    if let Some(latest_scan) = scans.first() {
+        let files = query!(ScanFile, scan.matches(id == { latest_scan.id }))
+            .order_desc(colname!(ScanFile, loc))
+            .load(conn)
+            .map_err(|e| api_error!(e.to_string()))?;
+        return Ok(api_response!(ScansResponse { scans, files }));
+    }
+
+    Ok(api_response!(ScansResponse {
+        scans,
+        files: Vec::new()
+    }))
+}
+
+#[tauri::command]
 pub fn scan_project(
     db: State<DBConnection>,
     uuid: String,
 ) -> Result<ApiResponse<ScanResponse>, ApiError> {
     let conn_guard = db.conn.lock().map_err(|e| api_error!(e.to_string()))?;
     let conn = &*conn_guard;
-
     let mut project = Project::get(conn, uuid).map_err(|e| match e {
         Error::NoSuchObject => api_error!(String::from("Not found")),
         _ => api_error!(e.to_string()),
@@ -132,12 +158,13 @@ pub fn scan_project(
     // Initialize the scan id
     scan.save(conn).map_err(|e| api_error!(e.to_string()))?;
 
-    let mut scan_files = Vec::<ScanFileType>::new();
+    let mut scan_files = Vec::<ScanFile>::new();
     for (extension, a) in analysis {
-        let mut scan_file = ScanFileType {
+        let mut scan_file = ScanFile {
             id: AutoPk::uninitialized(),
             scan: ForeignKey::from_pk(scan.id),
-            file_type: extension,
+            file_type: file_type_from_extension(&extension),
+            extension: extension,
             loc: a.loc,
             files: a.files as i16,
             created_at: scan.scanned_at,
@@ -159,6 +186,7 @@ pub fn scan_project(
     project.scans = Some(project.scans.unwrap_or(0) + 1);
     project.loc = Some(scan.loc);
     project.files = Some(scan.files);
+    project.updated_at = Utc::now();
 
     scan.save(conn).map_err(|e| api_error!(e.to_string()))?;
     project.save(conn).map_err(|e| api_error!(e.to_string()))?;

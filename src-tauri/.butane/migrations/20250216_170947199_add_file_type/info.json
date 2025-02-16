@@ -1,0 +1,10 @@
+{
+  "from_name": "20250216_144541871_init",
+  "table_bases": {
+    "Project": "20250216_144541871_init",
+    "ScanResult": "20250216_144541871_init"
+  },
+  "backends": [
+    "sqlite"
+  ]
+}

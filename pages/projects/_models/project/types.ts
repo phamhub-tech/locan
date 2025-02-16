@@ -6,7 +6,7 @@ export interface IProjectBaseJson extends IBaseModelJson {
 	loc: number | null
 	files: number | null
 	scans: number | null
-	lastScan: string | null
+	last_scan: string | null
 }
 export interface IProjectBase extends IBaseModel {
 	name: string

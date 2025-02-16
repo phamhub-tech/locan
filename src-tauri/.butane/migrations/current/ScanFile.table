@@ -31,6 +31,32 @@
       }
     },
     {
+      "name": "extension",
+      "sqltype": {
+        "KnownId": {
+          "Ty": "Text"
+        }
+      },
+      "nullable": false,
+      "pk": false,
+      "auto": false,
+      "unique": false,
+      "default": null
+    },
+    {
+      "name": "file_type",
+      "sqltype": {
+        "KnownId": {
+          "Ty": "Text"
+        }
+      },
+      "nullable": false,
+      "pk": false,
+      "auto": false,
+      "unique": false,
+      "default": null
+    },
+    {
       "name": "loc",
       "sqltype": {
         "KnownId": {
@@ -57,10 +83,10 @@
       "default": null
     },
     {
-      "name": "file_type",
+      "name": "created_at",
       "sqltype": {
         "KnownId": {
-          "Ty": "Text"
+          "Ty": "Timestamp"
         }
       },
       "nullable": false,

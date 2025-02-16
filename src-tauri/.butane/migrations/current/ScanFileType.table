@@ -31,6 +31,19 @@
       }
     },
     {
+      "name": "extension",
+      "sqltype": {
+        "KnownId": {
+          "Ty": "Text"
+        }
+      },
+      "nullable": false,
+      "pk": false,
+      "auto": false,
+      "unique": false,
+      "default": null
+    },
+    {
       "name": "file_type",
       "sqltype": {
         "KnownId": {

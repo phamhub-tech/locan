@@ -1,0 +1,2 @@
+ALTER TABLE ScanFileType
+RENAME TO ScanFile;

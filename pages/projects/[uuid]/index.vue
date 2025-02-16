@@ -23,17 +23,19 @@
           <p class="text-xs">{{ $t("scans", project.scans ?? 0) }}</p>
         </div>
         <div class="ml-auto px-4 py-2 text-center space-y-1">
-          <p class="font-mono text-base">{{ humanizeDate(new Date(), false)}}</p>
+          <p class="font-mono text-base">
+            {{
+              project.lastScan ? humanizeDate(project.lastScan, false) : "--"
+            }}
+          </p>
           <p class="text-xs">{{ $t("lastScan") }}</p>
         </div>
       </section>
     </div>
 
-		<div>
-			S: {{ scanResults }}
-			<br />
-			<LocTrend />
-		</div>
+    <div>
+			<LocTrend :uuid="project.uuid" />
+    </div>
   </div>
 </template>
 
@@ -54,7 +56,6 @@ const {
   projectApiStatus: apiStatus,
   projectApiMsg: apiMsg,
   project,
-	scanResults,
 } = storeToRefs(store);
 const apiHandle = useApiHandle(apiStatus);
 

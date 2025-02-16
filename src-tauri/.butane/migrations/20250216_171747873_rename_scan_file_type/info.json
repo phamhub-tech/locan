@@ -1,0 +1,11 @@
+{
+  "from_name": "20250216_170947199_add_file_type",
+  "table_bases": {
+    "Project": "20250216_144541871_init",
+    "ScanFileType": "20250216_170947199_add_file_type",
+    "ScanResult": "20250216_144541871_init"
+  },
+  "backends": [
+    "sqlite"
+  ]
+}

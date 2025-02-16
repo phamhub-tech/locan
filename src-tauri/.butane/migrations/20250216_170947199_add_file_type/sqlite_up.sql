@@ -1,0 +1,1 @@
+ALTER TABLE ScanFileType ADD COLUMN "extension" TEXT NOT NULL DEFAULT '';

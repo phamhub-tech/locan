@@ -7,3 +7,12 @@ pub fn get_entry_name(entry: &walkdir::DirEntry) -> String {
 pub fn get_entry_path(entry: &walkdir::DirEntry) -> String {
     entry.path().to_string_lossy().to_string()
 }
+
+/// Return the file type from the extension
+pub fn file_type_from_extension(extension: &str) -> String {
+    match extension {
+        "rs" => "rust",
+        "vue" => "vue",
+        _ => "unknown"
+    }.to_string()
+}

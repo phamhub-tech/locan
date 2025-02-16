@@ -33,7 +33,7 @@ export class ProjectBase extends BaseModel implements IProjectBase {
 			loc: json.loc,
 			files: json.files,
 			scans: json.scans,
-			lastScan: json.lastScan ? new Date(json.lastScan) : null
+			lastScan: json.last_scan ? new Date(json.last_scan) : null
 		}
 	}
 
@@ -45,7 +45,7 @@ export class ProjectBase extends BaseModel implements IProjectBase {
 			loc: this.loc,
 			files: this.files,
 			scans: this.scans,
-			lastScan: this.lastScan?.toISOString() ?? null,
+			last_scan: this.lastScan?.toISOString() ?? null,
 		}
 	}
 }

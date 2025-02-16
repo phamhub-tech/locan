@@ -1,11 +1,16 @@
 <template>
-  <div class="grid-centered h-96 rounded-lg border py-4 space-y-4">
+  <div
+    :class="[
+      'grid-centered h-96 rounded-lg border py-4 space-y-4',
+      { 'bg-background': !scans?.length },
+    ]"
+  >
     <LineChart
-      v-if="data.length"
-      :data="data"
-      :categories="['value']"
+      v-if="scans?.length"
+      :data="scans"
+      :categories="['loc']"
       :show-legend="false"
-      index="label"
+      index="loc"
       class="h-full"
     />
 
@@ -15,8 +20,7 @@
 
 <script setup lang="ts">
 import { LineChart } from "~/_common/components/ui/chart-line";
+import type { ScanResultModel } from "~/pages/projects/_models/scan";
 
-import type { ILocScanChartData } from "../../_types";
-
-defineProps<{ data: ILocScanChartData[] }>();
+defineProps<{ scans: ScanResultModel[] | null }>();
 </script>

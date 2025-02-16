@@ -23,6 +23,7 @@ pub fn run() {
             projects::add_project,
             projects::get_projects,
             projects::get_project,
+            scanner::get_project_scans,
             scanner::scan_project,
         ])
         .run(tauri::generate_context!())

@@ -1,8 +1,8 @@
 import { api } from "~/_common/core/api";
 
-import type { IProjectScanJson, IProjectShallowJson } from "../_models/project";
+import type { IProjectShallowJson } from "../_models/project";
 
-import type { IProjectAddPayload } from "./types";
+import type { IProjectAddPayload, IProjectScanResult, IProjectScansResponse } from "./types";
 
 export const projectsService = {
 	getProjects() {
@@ -14,7 +14,10 @@ export const projectsService = {
 	getProject(uuid: string) {
 		return api.invoke<IProjectShallowJson>('get_project', { uuid })
 	},
+	getProjectScans(uuid: string) {
+		return api.invoke<IProjectScansResponse>('get_project_scans', { uuid });
+	},
 	scanProject(uuid: string) {
-		return api.invoke<IProjectScanJson>('scan_project', { uuid })
+		return api.invoke<IProjectScanResult>('scan_project', { uuid })
 	},
 }

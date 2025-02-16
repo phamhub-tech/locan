@@ -30,10 +30,8 @@ export function abbreviateCount(count: number): string {
 	}
 
 	let num = (count / dividend).toFixed(1)
-	console.log('Num', num)
 	if (num[num.length - 1] === '0') num = num.substring(0, num.length - 2)
 
-	console.log('C: ', count, num, suffix)
 	return `${num}${suffix}`
 }
 

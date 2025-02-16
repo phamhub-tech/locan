@@ -2,7 +2,8 @@ import { TApiStatus } from "~/_common/core/api";
 import { delay, getApiMessage } from "~/_common/utils";
 
 import { ProjectShallowModel, type IProjectScan } from "../_models/project";
-import { projectsService, type IProjectAddPayload } from "../_services";
+import { projectsService, type IProjectAddPayload, type IProjectScanResult } from "../_services";
+import { ScanResultModel } from "../_models/scan";
 
 interface IState {
 	projectsApiStatus: TApiStatus;
@@ -16,9 +17,13 @@ interface IState {
 	projectApiMsg: string;
 	project: ProjectShallowModel | null;
 
-	scanProjectApiStatus: TApiStatus;
-	scanProjectApiMsg: string;
-	scanResults: IProjectScan | null;
+	projectScansApiStatus: TApiStatus;
+	projectScansApiMsg: string;
+	projectScans: ScanResultModel[] | null;
+
+	projectScanResultsApiStatus: TApiStatus;
+	projectScanResultsApiMsg: string;
+	projectScanResults: IProjectScanResult | null;
 }
 
 const state = (): IState => ({
@@ -33,9 +38,13 @@ const state = (): IState => ({
 	projectApiMsg: '',
 	project: null,
 
-	scanProjectApiStatus: TApiStatus.default,
-	scanProjectApiMsg: '',
-	scanResults: null,
+	projectScansApiStatus: TApiStatus.default,
+	projectScansApiMsg: '',
+	projectScans: null,
+
+	projectScanResultsApiStatus: TApiStatus.default,
+	projectScanResultsApiMsg: '',
+	projectScanResults: null,
 })
 
 export const useProjectsStore = defineStore('projects', {
@@ -88,39 +97,55 @@ export const useProjectsStore = defineStore('projects', {
 				this.addProjectApiMsg = getApiMessage(e)
 			}
 		},
+		async getProjectScans(uuid: string) {
+			try {
+				this.projectScansApiStatus = TApiStatus.loading
+				this.projectScansApiMsg = ''
+
+				const { data: { scans, files } } = await projectsService.getProjectScans(uuid)
+				this.projectScans = scans.map(ScanResultModel.fromJson)
+
+				this.projectScansApiStatus = TApiStatus.success
+			} catch (e) {
+				this.projectScansApiStatus = TApiStatus.error
+				this.projectScansApiMsg = getApiMessage(e)
+			}
+		},
 		async scanProject(uuid: string) {
 			try {
-				this.scanProjectApiStatus = TApiStatus.loading
-				this.scanProjectApiMsg = ''
+				this.projectScanResultsApiStatus = TApiStatus.loading
+				this.projectScanResultsApiMsg = ''
 
-				await delay(3000);
-				const { data } = await projectsService.scanProject(uuid)
-				this.scanResults = data
+				const [{ data }, _] = await Promise.all([
+					projectsService.scanProject(uuid),
+					delay(1000),
+				]);
+				const scan = ScanResultModel.fromJson(data.scan)
+
+				this.projectScanResults = data
 				if (this.project?.rootDir === uuid) {
-					this.project.loc = data.loc
+					const project = this.project;
+
+					project.loc = scan.loc
+					project.files = scan.files
+					project.scans = (project.scans ?? 0) + 1
+					project.lastScan = scan.scannedAt
 				}
 				if (this.projects !== null) {
 					const project = this.projects.find((p) => p.rootDir == uuid);
-					if (project) project.loc = data.loc
+					if (project) {
+						project.loc = scan.loc
+						project.files = scan.files
+						project.scans = (project.scans ?? 0) + 1
+						project.lastScan = scan.scannedAt
+					}
 				}
 
-				this.scanProjectApiStatus = TApiStatus.success
+				this.projectScanResultsApiStatus = TApiStatus.success
 			} catch (e) {
-				this.scanProjectApiStatus = TApiStatus.error
-				this.scanProjectApiMsg = getApiMessage(e)
+				this.projectScanResultsApiStatus = TApiStatus.error
+				this.projectScanResultsApiMsg = getApiMessage(e)
 			}
 		},
-
-		async getProjectOverview(id: string) {
-			try {
-				this.projectApiStatus = TApiStatus.loading
-				this.projectApiMsg = ''
-
-				this.projectApiStatus = TApiStatus.success
-			} catch (e) {
-				this.projectApiStatus = TApiStatus.error
-				this.projectApiMsg = getApiMessage(e)
-			}
-		}
 	}
 })
