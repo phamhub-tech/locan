@@ -5,12 +5,14 @@ export interface IProjectBaseJson extends IBaseModelJson {
 	root_dir: string
 	loc: number | null
 	files: number | null
+	scans: number | null
 	lastScan: string | null
 }
 export interface IProjectBase extends IBaseModel {
 	name: string
 	rootDir: string
 	loc: number | null
+	scans: number | null
 	files: number | null
 	lastScan: Date | null
 }

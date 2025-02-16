@@ -12,6 +12,7 @@ export class ProjectBase extends BaseModel implements IProjectBase {
 	public rootDir: string;
 	public loc: number | null;
 	public files: number | null;
+	public scans: number | null;
 	public lastScan: Date | null;
 	constructor(data: IProjectBase) {
 		super(data)
@@ -20,6 +21,7 @@ export class ProjectBase extends BaseModel implements IProjectBase {
 		this.rootDir = data.rootDir
 		this.loc = data.loc
 		this.files = data.files
+		this.scans = data.scans
 		this.lastScan = data.lastScan
 	}
 
@@ -30,6 +32,7 @@ export class ProjectBase extends BaseModel implements IProjectBase {
 			rootDir: json.root_dir,
 			loc: json.loc,
 			files: json.files,
+			scans: json.scans,
 			lastScan: json.lastScan ? new Date(json.lastScan) : null
 		}
 	}
@@ -41,6 +44,7 @@ export class ProjectBase extends BaseModel implements IProjectBase {
 			root_dir: this.rootDir,
 			loc: this.loc,
 			files: this.files,
+			scans: this.scans,
 			lastScan: this.lastScan?.toISOString() ?? null,
 		}
 	}

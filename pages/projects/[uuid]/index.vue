@@ -18,6 +18,10 @@
           <p class="font-mono text-base">{{ project.files ?? "--" }}</p>
           <p class="text-xs">{{ $t("files", project.files ?? 0) }}</p>
         </div>
+        <div class="px-4 py-2 text-center space-y-1">
+          <p class="font-mono text-base">{{ project.scans ?? "--" }}</p>
+          <p class="text-xs">{{ $t("scans", project.scans ?? 0) }}</p>
+        </div>
         <div class="ml-auto px-4 py-2 text-center space-y-1">
           <p class="font-mono text-base">{{ humanizeDate(new Date(), false)}}</p>
           <p class="text-xs">{{ $t("lastScan") }}</p>
