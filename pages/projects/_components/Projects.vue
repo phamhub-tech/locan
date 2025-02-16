@@ -6,7 +6,7 @@
           <th>{{ $t("name") }}</th>
           <th>{{ $t("loc") }}</th>
           <th>{{ $t("files", 2) }}</th>
-          <th>{{ $t("updated") }}</th>
+          <th>{{ $t("scanned") }}</th>
           <th>{{ $t("created") }}</th>
         </tr>
       </thead>
@@ -41,8 +41,8 @@
               </td>
               <td>{{ project.loc ?? "-" }}</td>
               <td>{{ project.files ?? "-" }}</td>
-              <td>{{ format(project.updatedAt, "dd MMM yyyy") }}</td>
-              <td>{{ format(project.createdAt, "dd MMM yyyy") }}</td>
+              <td>{{ project.lastScan ? humanizeDate(project.lastScan, false) : '-' }}</td>
+              <td>{{ humanizeDate(project.createdAt, false) }}</td>
             </tr>
           </template>
           <tr v-else>
@@ -62,7 +62,7 @@ import { format } from "date-fns";
 import { TextLoader } from "~/_common/components/loaders/text";
 import { useApiHandle } from "~/_common/core/api/composables";
 import Status from "~/_common/components/Status.vue";
-import { getRouteName } from "~/_common/utils";
+import { getRouteName, humanizeDate } from "~/_common/utils";
 import { FadeTransition } from "~/_common/components/transitions";
 
 import { useProjectsStore } from "../_store/projects";

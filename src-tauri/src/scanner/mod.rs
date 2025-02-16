@@ -81,8 +81,9 @@ pub fn get_project_scans(
         .load(conn)
         .map_err(|e| api_error!(e.to_string()))?;
 
-    if let Some(latest_scan) = scans.first() {
-        let files = query!(ScanFile, scan.matches(id == { latest_scan.id }))
+    if let Some(latest_scan) = scans.last() {
+        let scan_id = latest_scan.id;
+        let files = query!(ScanFile, scan.matches(id == { scan_id }))
             .order_desc(colname!(ScanFile, loc))
             .load(conn)
             .map_err(|e| api_error!(e.to_string()))?;
@@ -125,7 +126,6 @@ pub fn scan_project(
         }
 
         if entry.file_type().is_dir() {
-            println!("Skipping directory: {entry_path}");
             continue;
         }
 

@@ -23,7 +23,7 @@
             role="none"
           />
           <div class="flex items-center gap-x-2">
-            <img :src="icon" class="size-6" />
+            <img :src="icon" class="size-6 object-contain" />
             <p>{{ capitalize(file) }}</p>
           </div>
           <p class="font-medium">{{ getPercentage(loc) }}%</p>

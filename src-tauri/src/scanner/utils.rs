@@ -12,7 +12,7 @@ pub fn get_entry_path(entry: &walkdir::DirEntry) -> String {
 pub fn file_type_from_extension(extension: &str) -> String {
     match extension {
         "md" => "markdown",
-        "gitignore" => "gitignore",
+        "gitignore" => "git",
         "js" => "javascript",
         "json" => "json",
         "rs" => "rust",
