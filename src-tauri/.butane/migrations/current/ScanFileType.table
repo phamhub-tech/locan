@@ -1,34 +1,37 @@
 {
-  "name": "Project",
+  "name": "ScanFileType",
   "columns": [
     {
-      "name": "uuid",
+      "name": "id",
       "sqltype": {
         "KnownId": {
-          "Ty": "Text"
+          "Ty": "Int"
         }
       },
       "nullable": false,
       "pk": true,
-      "auto": false,
-      "unique": true,
+      "auto": true,
+      "unique": false,
       "default": null
     },
     {
-      "name": "name",
+      "name": "scan",
       "sqltype": {
-        "KnownId": {
-          "Ty": "Text"
-        }
+        "Deferred": "PK:ScanResult"
       },
       "nullable": false,
       "pk": false,
       "auto": false,
-      "unique": true,
-      "default": null
+      "unique": false,
+      "default": null,
+      "reference": {
+        "Deferred": {
+          "Deferred": "PK:ScanResult"
+        }
+      }
     },
     {
-      "name": "root_dir",
+      "name": "file_type",
       "sqltype": {
         "KnownId": {
           "Ty": "Text"
@@ -47,7 +50,7 @@
           "Ty": "Int"
         }
       },
-      "nullable": true,
+      "nullable": false,
       "pk": false,
       "auto": false,
       "unique": false,
@@ -60,45 +63,6 @@
           "Ty": "Int"
         }
       },
-      "nullable": true,
-      "pk": false,
-      "auto": false,
-      "unique": false,
-      "default": null
-    },
-    {
-      "name": "scans",
-      "sqltype": {
-        "KnownId": {
-          "Ty": "Int"
-        }
-      },
-      "nullable": true,
-      "pk": false,
-      "auto": false,
-      "unique": false,
-      "default": null
-    },
-    {
-      "name": "last_scan",
-      "sqltype": {
-        "KnownId": {
-          "Ty": "Timestamp"
-        }
-      },
-      "nullable": true,
-      "pk": false,
-      "auto": false,
-      "unique": false,
-      "default": null
-    },
-    {
-      "name": "created_at",
-      "sqltype": {
-        "KnownId": {
-          "Ty": "Timestamp"
-        }
-      },
       "nullable": false,
       "pk": false,
       "auto": false,
@@ -106,7 +70,7 @@
       "default": null
     },
     {
-      "name": "updated_at",
+      "name": "created_at",
       "sqltype": {
         "KnownId": {
           "Ty": "Timestamp"

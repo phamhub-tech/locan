@@ -14,7 +14,7 @@ export const projectsService = {
 	getProject(uuid: string) {
 		return api.invoke<IProjectShallowJson>('get_project', { uuid })
 	},
-	scanProject(rootDir: string) {
-		return api.invoke<IProjectScanJson>('scan_project', { rootDir })
+	scanProject(uuid: string) {
+		return api.invoke<IProjectScanJson>('scan_project', { uuid })
 	},
 }

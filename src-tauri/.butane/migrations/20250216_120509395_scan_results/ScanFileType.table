@@ -1,0 +1,76 @@
+{
+  "name": "ScanFileType",
+  "columns": [
+    {
+      "name": "id",
+      "sqltype": {
+        "KnownId": {
+          "Ty": "Int"
+        }
+      },
+      "nullable": false,
+      "pk": true,
+      "auto": true,
+      "unique": false,
+      "default": null
+    },
+    {
+      "name": "scan",
+      "sqltype": {
+        "KnownId": {
+          "Ty": "Int"
+        }
+      },
+      "nullable": false,
+      "pk": false,
+      "auto": false,
+      "unique": false,
+      "default": null,
+      "reference": {
+        "Literal": {
+          "table_name": "ScanResult",
+          "column_name": "id"
+        }
+      }
+    },
+    {
+      "name": "file_type",
+      "sqltype": {
+        "KnownId": {
+          "Ty": "Text"
+        }
+      },
+      "nullable": false,
+      "pk": false,
+      "auto": false,
+      "unique": false,
+      "default": null
+    },
+    {
+      "name": "loc",
+      "sqltype": {
+        "KnownId": {
+          "Ty": "Int"
+        }
+      },
+      "nullable": false,
+      "pk": false,
+      "auto": false,
+      "unique": false,
+      "default": null
+    },
+    {
+      "name": "files",
+      "sqltype": {
+        "KnownId": {
+          "Ty": "Int"
+        }
+      },
+      "nullable": false,
+      "pk": false,
+      "auto": false,
+      "unique": false,
+      "default": null
+    }
+  ]
+}

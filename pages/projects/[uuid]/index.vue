@@ -30,6 +30,8 @@
     </div>
 
 		<div>
+			S: {{ scanResults }}
+			<br />
 			<LocTrend />
 		</div>
   </div>
@@ -52,13 +54,14 @@ const {
   projectApiStatus: apiStatus,
   projectApiMsg: apiMsg,
   project,
+	scanResults,
 } = storeToRefs(store);
 const apiHandle = useApiHandle(apiStatus);
 
 const route = useRoute();
 const uuid = route.params.uuid as string;
 getProject();
-function getProject() {
+async function getProject() {
   store.getProject(uuid);
 }
 </script>

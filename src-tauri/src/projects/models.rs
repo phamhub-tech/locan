@@ -1,4 +1,4 @@
-use butane::{model, AutoPk};
+use butane::model;
 use chrono::{DateTime, Utc};
 use serde::Serialize;
 
@@ -11,10 +11,12 @@ pub struct Project {
 
     #[unique]
     pub name: String,
+    pub root_dir: String,
     pub loc: Option<i32>,
     pub files: Option<i16>,
-		pub root_dir: String,
+    pub scans: Option<i16>,
 
+    pub last_scan: Option<DateTime<Utc>>,
     pub created_at: DateTime<Utc>,
     pub updated_at: DateTime<Utc>,
 }

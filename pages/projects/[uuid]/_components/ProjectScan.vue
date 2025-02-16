@@ -28,6 +28,6 @@ const {
 const apiHandle = useApiHandle(apiStatus);
 
 function scanProject() {
-  store.scanProject(props.project.rootDir);
+  store.scanProject(props.project.uuid);
 }
 </script>

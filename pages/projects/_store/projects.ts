@@ -88,19 +88,19 @@ export const useProjectsStore = defineStore('projects', {
 				this.addProjectApiMsg = getApiMessage(e)
 			}
 		},
-		async scanProject(rootDir: string) {
+		async scanProject(uuid: string) {
 			try {
 				this.scanProjectApiStatus = TApiStatus.loading
 				this.scanProjectApiMsg = ''
 
 				await delay(3000);
-				const { data } = await projectsService.scanProject(rootDir)
+				const { data } = await projectsService.scanProject(uuid)
 				this.scanResults = data
-				if (this.project?.rootDir === rootDir) {
+				if (this.project?.rootDir === uuid) {
 					this.project.loc = data.loc
 				}
 				if (this.projects !== null) {
-					const project = this.projects.find((p) => p.rootDir == rootDir);
+					const project = this.projects.find((p) => p.rootDir == uuid);
 					if (project) project.loc = data.loc
 				}
 

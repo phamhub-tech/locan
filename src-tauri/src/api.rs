@@ -4,7 +4,7 @@ use serde::Serialize;
 pub struct ApiResponse<T> {
     error: bool,
     message: String,
-    data: T,
+    pub data: T,
 }
 impl<T> ApiResponse<T> {
     pub fn new(data: T, message: String, error: bool) -> Self {
