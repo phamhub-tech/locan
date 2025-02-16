@@ -2,7 +2,6 @@ import {TApiStatus } from "~/_common/core/api";
 import { delay, getApiMessage } from "~/_common/utils";
 
 import { ProfileModel } from "../_models/profile";
-import { profileService } from "../_service";
 
 interface IState {
 	profileApiStatus: TApiStatus

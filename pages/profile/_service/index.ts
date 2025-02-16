@@ -1,15 +1,18 @@
-import type { TProfileApiResponse } from "./interface"
+import { api } from "~/_common/core/api"
 
-const basePath = '/users/profile'
+import type { IAppSettingsJson } from "../_models/settings"
 
 export const profileService = {
 	getProfile() {
-		return new Promise<TProfileApiResponse>((resolve, reject) => {
-			const { $api: api } = useNuxtApp()
-			api.get(basePath, {
-				onSuccess: resolve,
-				onError: reject,
-			})
-		})
+		//api.get(basePath, {
+		//	onSuccess: resolve,
+		//	onError: reject,
+		//})
+	}
+}
+
+export const settingsService = {
+	getSettings() {
+		return api.invoke<IAppSettingsJson>("get_settings");
 	}
 }

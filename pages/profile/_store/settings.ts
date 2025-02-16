@@ -1,6 +1,10 @@
 import { pageSizeOptions } from '~/_common/constants'
 
 import type { ISavedSettings, ISettings, ILanguage } from '../_types'
+import { TApiStatus } from '~/_common/core/api'
+import { AppSettings } from '../_models/settings'
+import { getApiMessage } from '~/_common/utils'
+import { settingsService } from '../_service'
 
 
 const languages: ILanguage[] = [
@@ -17,10 +21,14 @@ const _defaultSettings: ISettings = {
 }
 
 interface IState extends ISettings {
-	languages: ILanguage[]
-	activeLanguage: ILanguage
+	languages: ILanguage[];
+	activeLanguage: ILanguage;
 
-	pageSize: number
+	pageSize: number;
+
+	settingsApiStatus: TApiStatus;
+	settingsApiMsg: string;
+	settings: AppSettings | null;
 }
 
 const storeStorageKey = 'settings'
@@ -33,6 +41,10 @@ const state = (): IState => {
 	return {
 		..._defaultSettings,
 		languages,
+
+		settingsApiStatus: TApiStatus.default,
+		settingsApiMsg: '',
+		settings: null,
 	}
 }
 
@@ -72,7 +84,26 @@ export const useSettingsStore = defineStore('settings', {
 				_defaultSettings.activeLanguage
 
 			this.activeLanguage = activeLanguage
+			this.getSettings()
 		},
+
+		async getSettings() {
+			if (this.settings !== null) return;
+
+			try {
+				this.settingsApiStatus = TApiStatus.loading;
+				this.settingsApiMsg = '';
+
+				const { data } = await settingsService.getSettings()
+				this.settings = AppSettings.fromJson(data);
+
+				this.settingsApiStatus = TApiStatus.success;
+			} catch (e) {
+				this.settingsApiStatus = TApiStatus.error;
+				this.settingsApiMsg = getApiMessage(e)
+			}
+		},
+
 		reset() {
 			this.$reset()
 		},
