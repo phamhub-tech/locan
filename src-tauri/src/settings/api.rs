@@ -25,7 +25,9 @@ pub fn save_settings(
     manager: State<AppSettingsManager>,
     new_settings: AppSettings,
 ) -> Result<ApiResponse<String>, ApiError> {
-    manager.save(&new_settings).map_err(|e| api_error!(e.to_string()))?;
+    manager
+        .save(&new_settings)
+        .map_err(|e| api_error!(e.to_string()))?;
 
     Ok(api_response!("".to_string()))
 }

@@ -4,6 +4,7 @@ use std::{
     sync::{Arc, Mutex},
 };
 
+use notify::{recommended_watcher, Watcher};
 use serde::{Deserialize, Serialize};
 use tauri::AppHandle;
 
@@ -23,21 +24,20 @@ impl AppSettingsManager {
             path: json_path,
         };
 
+        manager.watch_for_changes();
         manager
     }
 
     /// Saves the app settings
+    ///
+    /// The current settings will be updated by the watcher, not this function
     pub fn save(&self, new_settings: &AppSettings) -> Result<(), Box<dyn std::error::Error>> {
         println!("Saving new settings: {:?}", new_settings);
 
         // TODO: Handle errors properly
-        let mut settings = self.settings.lock().unwrap();
-        *settings = new_settings.clone();
-
-        let content = serde_json::to_string_pretty(&*settings).unwrap();
+        let content = serde_json::to_string_pretty(new_settings).unwrap();
         fs::write(&self.path, content).unwrap();
-
-        println!("Saved settings");
+        println!("Saved settings.");
         Ok(())
     }
 
@@ -45,6 +45,39 @@ impl AppSettingsManager {
         let content = read_to_string(path)?;
         let settings = serde_json::from_str::<AppSettings>(&content)?;
         Ok(settings)
+    }
+
+    fn watch_for_changes(&self) {
+        let path = self.path.clone();
+        let settings_clone = self.settings.clone();
+
+        std::thread::spawn(move || {
+            let (tx, rx) = std::sync::mpsc::channel();
+            let mut watcher = recommended_watcher(tx).unwrap();
+            watcher
+                .watch(&path, notify::RecursiveMode::NonRecursive)
+                .unwrap();
+            println!("Setup file watcher for settings.");
+
+            for res in rx.iter() {
+                match res {
+                    Ok(event) => {
+                        let kind = event.kind;
+                        if !(kind.is_create() || kind.is_modify()) {
+                            continue;
+                        }
+
+                        println!("Received modify event: {:?}", kind);
+                        if let Ok(new_settings) = Self::load_from_file(&path) {
+                            let mut settings = settings_clone.lock().unwrap();
+                            println!("Update new settings: {:?}", new_settings);
+                            *settings = new_settings;
+                        }
+                    }
+                    Err(e) => eprintln!("Watch error: {:?}", e),
+                }
+            }
+        });
     }
 }
 
