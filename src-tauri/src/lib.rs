@@ -1,10 +1,7 @@
-use std::sync::Mutex;
-
 use tauri::Manager;
 
 mod api;
 mod butane_migrations;
-mod config;
 mod db;
 mod projects;
 mod scanner;
@@ -20,8 +17,8 @@ pub fn run() {
             let conn = db::establish_connection(&handle);
             app.manage(conn);
 
-            let app_settings = settings::models::AppSettings::load(&handle);
-            app.manage(Mutex::new(app_settings));
+            let settings_manager = settings::models::AppSettingsManager::new(&handle);
+            app.manage(settings_manager);
 
             Ok(())
         })
@@ -33,6 +30,7 @@ pub fn run() {
             scanner::get_project_scans,
             scanner::scan_project,
             settings::api::get_settings,
+            settings::api::save_settings,
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");

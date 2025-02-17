@@ -1,4 +1,6 @@
 {
+	"theme": "Theme",
+	"settings": "Settings",
 	"files": "File | Files",
 	"selectProjectRootTitle": "Select project root folder",
 	"browse": "Browse",
@@ -55,6 +57,7 @@
 		"unmoderated": "Unmoderated"
 	},
 	"cancel": "Cancel",
+	"save": "Save",
 	"error": "Error",
 	"success": "Success",
 	"retry": "Retry",

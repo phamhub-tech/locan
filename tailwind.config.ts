@@ -52,13 +52,18 @@ const config: Config = {
 					DEFAULT: 'hsl(var(--popover))',
 					foreground: 'hsl(var(--popover-foreground))',
 				},
-				toolbar: {
-					background: 'hsl(var(--toolbar-background))',
-				},
 				card: {
 					DEFAULT: 'hsl(var(--card))',
 					foreground: 'hsl(var(--card-foreground))',
 				},
+
+				// Themeable
+				toolbar: {
+					background: 'hsl(var(--toolbar-background))'
+				},
+				highlight: {
+					background: 'hsl(var(--highlight-background))'
+				}
 			},
 			borderRadius: {
 				xl: 'calc(var(--radius) + 4px)',

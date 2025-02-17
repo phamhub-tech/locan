@@ -1,19 +1,13 @@
 <template>
-  <Tabs default-value="scan" class="flex gap-x-4 items-start">
+  <Tabs v-if="settings" default-value="scan" class="flex gap-x-4 items-start">
     <TabsList class="flex-col w-32">
 			<TabsTrigger value="scan" class="w-full justify-start">
-        {{ $t("scans") }}
-      </TabsTrigger>
-      <TabsTrigger value="scano" class="w-full justify-start">
-        {{ $t("scans") }}
+        {{ $t("scans", 2) }}
       </TabsTrigger>
     </TabsList>
 
 		<TabsContent value="scan" class="flex-1 mt-0">
 			<ScanSettings />
-		</TabsContent>
-		<TabsContent value="scano">
-			<p>Scano</p>
 		</TabsContent>
   </Tabs>
 </template>
@@ -22,4 +16,8 @@
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "~/_common/components/ui/tabs";
 
 import ScanSettings from "./_components/ScanSettings.vue";
+import { useSettingsStore } from "./_store";
+
+const store = useSettingsStore()
+const { settings } = storeToRefs(store)
 </script>

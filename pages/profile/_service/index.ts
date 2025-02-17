@@ -14,5 +14,8 @@ export const profileService = {
 export const settingsService = {
 	getSettings() {
 		return api.invoke<IAppSettingsJson>("get_settings");
+	},
+	saveSettings(settings: IAppSettingsJson) {
+		return api.invoke<string>("save_settings", { newSettings: settings })
 	}
 }

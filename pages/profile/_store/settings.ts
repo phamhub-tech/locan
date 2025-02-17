@@ -29,6 +29,9 @@ interface IState extends ISettings {
 	settingsApiStatus: TApiStatus;
 	settingsApiMsg: string;
 	settings: AppSettings | null;
+
+	saveSettingsApiStatus: TApiStatus;
+	saveSettingsApiMsg: string;
 }
 
 const storeStorageKey = 'settings'
@@ -45,6 +48,9 @@ const state = (): IState => {
 		settingsApiStatus: TApiStatus.default,
 		settingsApiMsg: '',
 		settings: null,
+
+		saveSettingsApiStatus: TApiStatus.default,
+		saveSettingsApiMsg: '',
 	}
 }
 
@@ -56,12 +62,12 @@ export const useSettingsStore = defineStore('settings', {
 	actions: {
 		setLanguage(language: ILanguage) {
 			this.activeLanguage = language
-			this.saveSettings()
+			this.saveLocalSettings()
 
 			document.documentElement.setAttribute('lang', language.locale)
 		},
 
-		saveSettings() {
+		saveLocalSettings() {
 			const settings: ISavedSettings = {
 				activeLanguageKey: this.activeLanguage.locale,
 				pageSize: this.pageSize,
@@ -101,6 +107,20 @@ export const useSettingsStore = defineStore('settings', {
 			} catch (e) {
 				this.settingsApiStatus = TApiStatus.error;
 				this.settingsApiMsg = getApiMessage(e)
+			}
+		},
+		async saveSettings(settings: AppSettings) {
+			try {
+				this.saveSettingsApiStatus = TApiStatus.loading
+				this.saveSettingsApiMsg = '';
+
+				await settingsService.saveSettings(settings.toJson())
+				this.settings = settings;
+
+				this.saveSettingsApiStatus = TApiStatus.success
+			} catch(e) {
+				this.saveSettingsApiStatus = TApiStatus.error
+				this.saveSettingsApiMsg = getApiMessage(e);
 			}
 		},
 

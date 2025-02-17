@@ -15,4 +15,14 @@ export class AppSettings implements IAppSettings {
 			}
 		})
 	}
+
+	toJson(): IAppSettingsJson {
+		const scan = this.scan;
+		return {
+			scan: {
+				ignore_dirs: scan.ignoreDirs,
+				ignore_extensions: scan.ignoreExtensions,
+			}
+		}
+	}
 }
