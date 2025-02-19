@@ -30,4 +30,5 @@ file-format = { version = "0.26.0", features = ["reader-txt"] }
 walkdir = "2.5.0"
 notify = { version = "8.0.0", features = ["serde"] }
 globset = "0.4.15"
+regex = "1.11.1"
 

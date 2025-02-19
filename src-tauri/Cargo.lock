@@ -2270,6 +2270,7 @@ dependencies = [
  "file-format",
  "globset",
  "notify",
+ "regex",
  "serde",
  "serde_json",
  "tauri",

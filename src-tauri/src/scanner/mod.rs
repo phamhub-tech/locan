@@ -18,7 +18,7 @@ use tauri::State;
 use types::LocAnalysis;
 use walkdir::WalkDir;
 
-use utils::file_type_from_extension;
+use utils::{file_type_from_file_name, get_extension_from_path};
 
 use crate::{
     api::{ApiError, ApiResponse},
@@ -169,10 +169,10 @@ pub fn scan_project(
             continue;
         }
 
-        let ext = entry_path.split(".").last();
+        let ext = get_extension_from_path(&entry_path);
         if let Some(extension) = ext {
             match analyze_loc_for_file(&entry_path) {
-                Some(result) => match analysis.get_mut(extension) {
+                Some(result) => match analysis.get_mut(&extension) {
                     Some(a) => {
                         a.files += result.files;
                         a.loc += result.loc;
@@ -203,7 +203,7 @@ pub fn scan_project(
         let mut scan_file = ScanFile {
             id: AutoPk::uninitialized(),
             scan: ForeignKey::from_pk(scan.id),
-            file_type: file_type_from_extension(&extension),
+            file_type: file_type_from_file_name(&extension),
             extension,
             loc: a.loc,
             files: a.files as i16,
