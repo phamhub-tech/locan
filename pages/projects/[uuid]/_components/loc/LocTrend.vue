@@ -64,6 +64,7 @@ const latestFiles = computed<ILocScanFile[]>(() => {
     icon: `/icons/${f.fileType}.svg`,
     file: f.fileType as any,
     loc: f.loc,
+		ext: f.extension,
   }));
 });
 

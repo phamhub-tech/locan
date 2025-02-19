@@ -2,7 +2,7 @@
   <div class="text-sm rounded-lg borde p- space-y-4">
     <div class="space-y-2">
       <div
-        v-for="({ loc, icon, file }, i) of data"
+        v-for="({ loc, icon, ext, file }, i) of data"
         :key="`datum-${file}`"
         class="flex items-center"
       >
@@ -27,8 +27,10 @@
           />
           <div class="flex items-center gap-x-2">
             <img :src="icon" class="size-6 object-contain" />
-            <p>{{ capitalize(file) }}</p>
-						{{ icon }}
+            <div>
+              <p>{{ capitalize(file) }}</p>
+              <p class="text-xs text-muted-foreground">.{{ ext }}</p>
+            </div>
           </div>
           <p class="font-medium">{{ getPercentage(loc) }}%</p>
         </div>

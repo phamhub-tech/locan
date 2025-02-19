@@ -7,6 +7,7 @@ export interface ILocScanFile {
   icon: string;
   file: TFileType;
   loc: number;
+	ext: string;
 }
 
 export enum TDuration {
