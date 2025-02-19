@@ -1,13 +1,20 @@
 <template>
   <div class="space-y-2">
     <div class="flex">
-      <Button variant="secondary" size="sm" class="ml-auto" @click="resetSettings">
+      <h1 class="text__h1">{{ $t("settings", 2) }}</h1>
+
+      <Button
+        variant="secondary"
+        size="sm"
+        class="ml-auto"
+        @click="resetSettings"
+      >
         <RefreshCcwIcon />
         {{ $t("reset") }}
       </Button>
     </div>
 
-		<hr />
+    <hr />
 
     <Tabs v-if="settings" default-value="scan" class="flex gap-x-4 items-start">
       <TabsList class="flex-col w-32">
@@ -39,7 +46,9 @@ import { RefreshCcwIcon } from "lucide-vue-next";
 const store = useSettingsStore();
 const { settings } = storeToRefs(store);
 
+store.getSettings();
+
 function resetSettings() {
-	store.resetSettings()
+  store.resetSettings();
 }
 </script>

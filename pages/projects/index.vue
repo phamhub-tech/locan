@@ -1,6 +1,6 @@
 <template>
-  <div class="space-y-6">
-    <h1 class="text__h1 py-2">Projects</h1>
+  <div class="space-y-4 pt-1">
+		<h1 class="text__h1">{{ $t('projects', 2)}}</h1>
 
     <div class="flex gap-x-4 justify-between items-center">
       <div class="flex gap-x-2 items-center shrink-0">

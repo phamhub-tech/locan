@@ -7,7 +7,7 @@
 
     <main
       :class="[
-        'flex-1 pt-4 px-4 pb-20',
+        'flex-1 pt-2 px-4 pb-20',
         'border border-black/10',
         'bg-white dark:bg-background',
       ]"

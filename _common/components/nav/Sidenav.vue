@@ -6,7 +6,7 @@
         'md:w-full md:max-w-none',
         'dark:bg-surface md:dark:bg-surface-dark/50 md:dark:border-transparent space-y-6',
         'dark:bg-toolbar-background',
-        'p-4',
+        'p-2',
       ]"
     >
       <Transition name="fade-fast" mode="out-in">
