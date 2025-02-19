@@ -40,7 +40,7 @@
     </div>
 
     <div>
-      <LocTrend :uuid="project.uuid" />
+      <LocTrend :uuid="uuid" />
     </div>
   </div>
 </template>
