@@ -40,17 +40,10 @@ import {
 } from "../../_types";
 
 import LocChart from "./LocChart.vue";
-import {
-  format,
-  startOfMonth,
-  startOfYear,
-  subDays,
-  subMonths,
-} from "date-fns";
+import { format, startOfMonth, startOfYear } from "date-fns";
 import LocFiles from "./LocFiles.vue";
 import { useApiHandle } from "~/_common/core/api/composables";
 import type { ScanResultModel } from "~/pages/projects/_models/scan";
-import { a } from "vitest/dist/chunks/suite.B2jumIFP.js";
 
 const props = defineProps<{ uuid: string }>();
 
@@ -64,20 +57,20 @@ const {
 const apiHandle = useApiHandle(apiStatus);
 
 const latestFiles = computed<ILocScanFile[]>(() => {
-	const files = projectScanFiles.value;
-	if (files === null) return [];
+  const files = projectScanFiles.value;
+  if (files === null) return [];
 
-	return files.map((f) => ({
-		icon: `/icons/${f.fileType}.svg`,
-		file: f.fileType as any,
-		loc: f.loc,
-	}))
-})
+  return files.map((f) => ({
+    icon: `/icons/${f.fileType}.svg`,
+    file: f.fileType as any,
+    loc: f.loc,
+  }));
+});
 
 const selectedDuration = ref(TDuration.thisMonth);
-const filteredScans = computed<[string, ScanResultModel[]] | null>(() => {
+const data = computed<ILocScanChartData[]>(() => {
   const scans = projectScans.value;
-  if (scans === null) return null;
+  if (scans === null) return [];
 
   const selected = selectedDuration.value;
 
@@ -92,28 +85,23 @@ const filteredScans = computed<[string, ScanResultModel[]] | null>(() => {
     filteredScans = scans.filter((s) => s.scannedAt >= earliest);
   }
 
-  return [formatKey, filteredScans];
-});
-const data = computed<ILocScanChartData[]>(() => {
-  const dMap: Record<string, number> = {};
-  const filtered = filteredScans.value;
-  if (filtered === null) return [];
+  const dMap: Record<string, { loc: number; date: Date }> = {};
+  for (const scan of filteredScans) {
+    const date = scan.scannedAt;
+    let key = format(date, formatKey);
+    const stored = dMap[key];
 
-  const [formatKey, scans] = filtered;
-  for (const scan of scans) {
-    let key = format(scan.scannedAt, formatKey);
-    const loc = dMap[key] as number | undefined;
-
-    if (loc === undefined) {
-      dMap[key] = scan.loc;
-    } else {
-      dMap[key] = Math.max(loc, scan.loc);
+    if (stored === undefined || stored.date.getTime() < date.getTime()) {
+      dMap[key] = {
+        loc: scan.loc,
+        date,
+      };
     }
   }
 
-  return Object.entries(dMap).map(([month, value]) => ({
+  return Object.entries(dMap).map(([month, { loc }]) => ({
     label: month,
-    value: value,
+    value: loc,
   }));
 });
 

@@ -24,7 +24,6 @@ interface IState {
 
 	projectScanResultsApiStatus: TApiStatus;
 	projectScanResultsApiMsg: string;
-	projectScanResults: IProjectScanResult | null;
 }
 
 const state = (): IState => ({
@@ -46,7 +45,6 @@ const state = (): IState => ({
 
 	projectScanResultsApiStatus: TApiStatus.default,
 	projectScanResultsApiMsg: '',
-	projectScanResults: null,
 })
 
 export const useProjectsStore = defineStore('projects', {
@@ -125,7 +123,12 @@ export const useProjectsStore = defineStore('projects', {
 				]);
 				const scan = ScanResultModel.fromJson(data.scan)
 
-				this.projectScanResults = data
+				if (this.projectScans === null) {
+					this.projectScans = [scan]
+				} else {
+					this.projectScans.push(scan)
+				}
+
 				if (this.project?.uuid === uuid) {
 					const project = this.project;
 
