@@ -17,5 +17,8 @@ export const settingsService = {
 	},
 	saveSettings(settings: IAppSettingsJson) {
 		return api.invoke<string>("save_settings", { newSettings: settings })
+	},
+	resetSettings() {
+		return api.invoke<string>("reset_settings")
 	}
 }

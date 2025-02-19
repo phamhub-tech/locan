@@ -123,6 +123,9 @@ export const useSettingsStore = defineStore('settings', {
 				this.saveSettingsApiMsg = getApiMessage(e);
 			}
 		},
+		resetSettings() {
+			settingsService.resetSettings()
+		},
 
 		reset() {
 			this.$reset()
