@@ -18,8 +18,8 @@
     </div>
 
     <div class="space-y-4">
-      <div class="grid xl:grid-cols-3 gap-4">
-        <LocChart :scans="data" class="xl:col-span-2" />
+      <div class="grid 2xl:grid-cols-3 gap-4">
+        <LocChart :scans="data" class="2xl:col-span-2" />
         <LocFiles :data="latestFiles" />
       </div>
     </div>
@@ -34,7 +34,6 @@ import { useProjectsStore } from "~/pages/projects/_store/projects";
 
 import {
   TDuration,
-  TFileType,
   type ILocScanChartData,
   type ILocScanFile,
 } from "../../_types";
@@ -43,7 +42,6 @@ import LocChart from "./LocChart.vue";
 import { format, startOfMonth, startOfYear } from "date-fns";
 import LocFiles from "./LocFiles.vue";
 import { useApiHandle } from "~/_common/core/api/composables";
-import type { ScanResultModel } from "~/pages/projects/_models/scan";
 
 const props = defineProps<{ uuid: string }>();
 
@@ -64,6 +62,7 @@ const latestFiles = computed<ILocScanFile[]>(() => {
     icon: `/icons/${f.fileType}.svg`,
     file: f.fileType as any,
     loc: f.loc,
+		files: f.files,
 		ext: f.extension,
   }));
 });

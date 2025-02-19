@@ -6,6 +6,7 @@ export interface ILocScanChartData {
 export interface ILocScanFile {
   icon: string;
   file: TFileType;
+	files: number;
   loc: number;
 	ext: string;
 }

@@ -2,6 +2,7 @@
 	"theme": "Theme",
 	"settings": "Settings",
 	"files": "File | Files",
+	"filesCount": "1 File | {count} Files",
 	"selectProjectRootTitle": "Select project root folder",
 	"browse": "Browse",
 	"status": "Status",

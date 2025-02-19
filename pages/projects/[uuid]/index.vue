@@ -11,15 +11,21 @@
 
       <section class="text-sm flex border-y divide-x">
         <div class="px-4 py-2 text-center space-y-1">
-          <p class="font-mono text-base">{{ project.loc ?? "--" }}</p>
+          <p class="font-mono text-base">
+            {{ project.loc ? delimit(project.loc) : "--" }}
+          </p>
           <p class="text-xs">{{ $t("loc") }}</p>
         </div>
         <div class="px-4 py-2 text-center space-y-1">
-          <p class="font-mono text-base">{{ project.files ?? "--" }}</p>
+          <p class="font-mono text-base">
+            {{ project.files ? delimit(project.files) : "--" }}
+          </p>
           <p class="text-xs">{{ $t("files", project.files ?? 0) }}</p>
         </div>
         <div class="px-4 py-2 text-center space-y-1">
-          <p class="font-mono text-base">{{ project.scans ?? "--" }}</p>
+          <p class="font-mono text-base">
+            {{ project.scans ? delimit(project.scans) : "--" }}
+          </p>
           <p class="text-xs">{{ $t("scans", project.scans ?? 0) }}</p>
         </div>
         <div class="ml-auto px-4 py-2 text-center space-y-1">
@@ -34,7 +40,7 @@
     </div>
 
     <div>
-			<LocTrend :uuid="project.uuid" />
+      <LocTrend :uuid="project.uuid" />
     </div>
   </div>
 </template>
@@ -46,7 +52,7 @@ import { useProjectsStore } from "../_store/projects";
 
 import ProjectScan from "./_components/ProjectScan.vue";
 import Status from "~/_common/components/Status.vue";
-import { humanizeDate } from "~/_common/utils";
+import { delimit, humanizeDate } from "~/_common/utils";
 import LocTrend from "./_components/loc/LocTrend.vue";
 
 definePageMeta({ name: "project-details" });

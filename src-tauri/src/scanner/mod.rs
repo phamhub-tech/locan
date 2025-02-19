@@ -43,8 +43,14 @@ fn analyze_loc_for_file<P: AsRef<Path> + std::fmt::Debug>(file_path: P) -> Optio
         }
         Ok(fmt) => fmt,
     };
-    if fmt != FileFormat::PlainText {
-        println!("Received unsupported file: {fmt}");
+
+    let format_whitelist = vec![
+        FileFormat::HypertextMarkupLanguage,
+        FileFormat::PlainText,
+        FileFormat::ScalableVectorGraphics,
+    ];
+    if !format_whitelist.contains(&fmt) {
+        println!("Received unsupported file: {fmt} -> {:?}", file_path);
         return None;
     }
 
@@ -66,7 +72,6 @@ fn analyze_loc_for_file<P: AsRef<Path> + std::fmt::Debug>(file_path: P) -> Optio
             files: 1,
         });
     }
-
     None
 }
 

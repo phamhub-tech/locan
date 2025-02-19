@@ -1,9 +1,9 @@
 <template>
   <div class="text-sm rounded-lg borde p- space-y-4">
-    <div class="space-y-2">
+    <div class="space-y-1">
       <div
-        v-for="({ loc, icon, ext, file }, i) of data"
-        :key="`datum-${file}`"
+        v-for="(stat, i) of data"
+        :key="`datum-${stat.file}`"
         class="flex items-center"
       >
         <div
@@ -15,7 +15,7 @@
         >
           <div
             :style="{
-              width: `${getPercentage(loc)}%`,
+              width: `${getPercentage(stat.loc)}%`,
               transitionDelay: `${i * 100}ms`,
             }"
             :class="[
@@ -26,15 +26,19 @@
             role="none"
           />
           <div class="flex items-center gap-x-2">
-            <img :src="icon" class="size-6 object-contain" />
+            <img :src="stat.icon" class="size-6 object-contain" />
             <div>
-              <p>{{ capitalize(file) }}</p>
-              <p class="text-xs text-muted-foreground">.{{ ext }}</p>
+              <p class="font-medium">{{ capitalize(stat.file) }}</p>
+              <p class="text-xs text-muted-foreground">
+                .{{ stat.ext }} • {{ $t("filesCount", stat.files) }}
+              </p>
             </div>
           </div>
-          <p class="font-medium">{{ getPercentage(loc) }}%</p>
+          <p class="font-medium">{{ getPercentage(stat.loc) }}%</p>
         </div>
-        <p class="font-medium w-8 text-right">{{ abbreviateCount(loc) }}</p>
+        <p class="font-medium w-8 text-right">
+          {{ abbreviateCount(stat.loc) }}
+        </p>
       </div>
     </div>
   </div>
