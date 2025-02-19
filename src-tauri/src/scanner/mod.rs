@@ -12,12 +12,13 @@ use std::{
 use butane::{colname, query, AutoPk, DataObject, Error, ForeignKey};
 use chrono::Utc;
 use file_format::FileFormat;
+use globset::{Glob, GlobSetBuilder};
 use models::{ScanFile, ScanResult};
 use tauri::State;
 use types::LocAnalysis;
 use walkdir::WalkDir;
 
-use utils::{file_type_from_extension, get_entry_name, get_entry_path};
+use utils::file_type_from_extension;
 
 use crate::{
     api::{ApiError, ApiResponse},
@@ -34,10 +35,10 @@ fn read_lines<P: AsRef<Path>>(file_path: P) -> io::Result<io::Lines<io::BufReade
     Ok(io::BufReader::new(file).lines())
 }
 
-fn analyze_loc_for_file<P: AsRef<Path>>(file_path: P) -> Option<LocAnalysis> {
+fn analyze_loc_for_file<P: AsRef<Path> + std::fmt::Debug>(file_path: P) -> Option<LocAnalysis> {
     let fmt = match FileFormat::from_file(&file_path) {
         Err(e) => {
-            println!("Could not get format: {:?}", e);
+            println!("Could not get format: {:?} {:?}", file_path, e);
             return None;
         }
         Ok(fmt) => fmt,
@@ -111,7 +112,6 @@ pub fn scan_project(
     })?;
 
     let root_dir = project.root_dir.clone();
-    let mut walker = WalkDir::new(&root_dir).into_iter();
     let mut analysis = HashMap::<String, LocAnalysis>::new();
 
     println!("Scanning {root_dir}");
@@ -120,38 +120,52 @@ pub fn scan_project(
         .lock()
         .expect("Couldn't lock settings")
         .scan;
+    let mut builder = GlobSetBuilder::new();
+    for pattern in &scan_settings.ignore_patterns {
+        match Glob::new(pattern) {
+            Ok(glob) => {
+                builder.add(glob);
+            }
+            Err(e) => {
+                eprintln!("An error occured building glob: {pattern}");
+                eprintln!("{:?}", e);
+            }
+        }
+    }
+    let glob_set = builder.build().unwrap();
+
+    let mut walker = WalkDir::new(&root_dir).into_iter();
     loop {
         let entry = match walker.next() {
             None => break,
             Some(Err(_)) => continue,
             Some(Ok(e)) => e,
         };
-        let entry_path = get_entry_path(&entry);
+
+        let entry_path = entry.path().to_string_lossy().to_string();
         if entry_path == root_dir {
             println!("Ignoring root path: {root_dir}");
             continue;
         }
 
-        if entry.file_type().is_dir() {
-            let entry_name = get_entry_name(&entry);
-            if scan_settings.ignore_dirs.contains(&entry_name.to_string()) {
-                println!("Skipping directory {entry_path}");
+        let should_skip = glob_set.is_match(&entry_path);
+        let is_dir = entry.file_type().is_dir();
+        if should_skip {
+            println!("Skipping ignored path: {:?}", entry_path);
+
+            if is_dir {
                 walker.skip_current_dir();
             }
 
             continue;
         }
 
+        if is_dir {
+            continue;
+        }
+
         let ext = entry_path.split(".").last();
         if let Some(extension) = ext {
-            if scan_settings
-                .ignore_extensions
-                .contains(&extension.to_string())
-            {
-                println!("Skipping extension {extension}: {entry_path}");
-                continue;
-            }
-
             match analyze_loc_for_file(&entry_path) {
                 Some(result) => match analysis.get_mut(extension) {
                     Some(a) => {

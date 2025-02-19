@@ -97,24 +97,20 @@ impl Default for AppSettings {
 
 #[derive(Clone, Debug, Serialize, Deserialize)]
 pub struct ScanSettings {
-    #[serde(default = "ignore_dirs_default")]
-    pub ignore_dirs: Vec<String>,
-
-    #[serde(default = "ignore_extensions_default")]
-    pub ignore_extensions: Vec<String>,
+    #[serde(default = "ignore_pattern_default")]
+    pub ignore_patterns: Vec<String>,
 }
 impl Default for ScanSettings {
     fn default() -> Self {
         ScanSettings {
-            ignore_dirs: ignore_dirs_default(),
-            ignore_extensions: ignore_extensions_default(),
+            ignore_patterns: ignore_pattern_default(),
         }
     }
 }
 
-fn ignore_dirs_default() -> Vec<String> {
-    vec![".git".to_string(), "node_modules".to_string()]
-}
-fn ignore_extensions_default() -> Vec<String> {
-    vec!["lock".to_string()]
+fn ignore_pattern_default() -> Vec<String> {
+    vec!["**/.git", "**/.output", "**/node_modules", "*.lock"]
+        .iter()
+        .map(|pattern| pattern.to_string())
+        .collect()
 }

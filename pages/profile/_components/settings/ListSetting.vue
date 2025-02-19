@@ -15,11 +15,12 @@
         <Input
           v-if="editingKey === getEntryKey(entry)"
           :id="getEntryKey(entry)"
+					:placeholder="placeholder"
           class="h-7 px-2"
           @blur="save(getEntryKey(entry), i)"
           @keyup.enter="save(getEntryKey(entry), i)"
         />
-        <p v-else class="font-mono">.{{ entry }}</p>
+        <p v-else class="font-mono">{{ entry }}</p>
         <div
           :class="[
             'flex items-center gap-x-0.5 group-hover:opacity-100',
@@ -75,7 +76,7 @@
 <script setup lang="ts">
 import { PencilIcon, PlusIcon, Trash2Icon } from "lucide-vue-next";
 
-const props = defineProps<{ title: string; keyPrefix: string }>();
+const props = defineProps<{ title: string; keyPrefix: string, placeholder?: string }>();
 const setting = defineModel<string[]>({ required: true });
 
 const editingKey = ref<string | null>();

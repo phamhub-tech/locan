@@ -1,13 +1,11 @@
 export interface IAppSettingsJson {
 	scan: {
-		ignore_dirs: string[];
-		ignore_extensions: string[];
+		ignore_patterns: string[];
 	}
 }
 
 export interface IScanSettings {
-	ignoreDirs: string[];
-	ignoreExtensions: string[];
+	ignorePatterns: string[];
 }
 export interface IAppSettings {
 	scan: IScanSettings;

@@ -10,8 +10,7 @@ export class AppSettings implements IAppSettings {
 		const scan = json.scan;
 		return new AppSettings({
 			scan: {
-				ignoreDirs: scan.ignore_dirs,
-				ignoreExtensions: scan.ignore_extensions,
+				ignorePatterns: scan.ignore_patterns,
 			}
 		})
 	}
@@ -20,8 +19,7 @@ export class AppSettings implements IAppSettings {
 		const scan = this.scan;
 		return {
 			scan: {
-				ignore_dirs: scan.ignoreDirs,
-				ignore_extensions: scan.ignoreExtensions,
+				ignore_patterns: scan.ignorePatterns,
 			}
 		}
 	}

@@ -2,10 +2,11 @@
   <div class="text-sm">
     <ListSetting
       v-model="ignoredExtensions"
-      :title="$t('ignoreExtensions.title')"
-      key-prefix="scan.ignoreExtensions"
+      :title="$t('ignorePathPattern.title')"
+			:placeholder="$t('excludePattern')"
+      key-prefix="scan.ignorePattern"
     >
-      {{ $t("ignoreExtensions.desc") }}
+      {{ $t("ignorePathPattern.desc") }}
     </ListSetting>
   </div>
 </template>
@@ -19,7 +20,7 @@ const store = useSettingsStore();
 const { settings } = storeToRefs(store);
 
 const scan = computed(() => settings.value!.scan ?? null);
-const ignoredExtensions = ref([...scan.value!.ignoreExtensions]);
+const ignoredExtensions = ref([...scan.value!.ignorePatterns]);
 watch(ignoredExtensions, save);
 
 const editingKey = ref<string | null>();
@@ -27,7 +28,7 @@ async function save(value: string[]) {
   const s = settings.value!;
   s.scan = {
     ...s.scan,
-    ignoreExtensions: value,
+    ignorePatterns: value,
   };
   await store.saveSettings(s);
 

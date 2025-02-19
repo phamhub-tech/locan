@@ -85,14 +85,11 @@
 	"thisYear": "This year",
 	"noScans": "No scans to show",
 	"scanned": "Scanned",
-	"ignoreExtensions": {
-		"title": "Ignored extensions",
-		"desc": "Configure file extensions that should be ignored when scanning for files."
+	"ignorePathPattern": {
+		"title": "Excluded paths",
+		"desc": "Configure glob patterns for ignoring files and folders when scanning."
 	},
-	"ignoreDirs": {
-		"title": "Ignored folders",
-		"desc": "Configure folders that should be ignored when scanning for files."
-	},
+	"excludePattern": "Exclude pattern",
 	"addItem": "Add item",
 	"created": "Created",
 	"home": "Home"
