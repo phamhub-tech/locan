@@ -1,7 +1,7 @@
 <template>
   <div class="text-sm space-y-6">
     <ListSetting
-      v-model="ignoredExtensions"
+      v-model="ignoredPatterns"
       :title="$t('ignorePathPattern.title')"
       :placeholder="$t('excludePattern')"
       key-prefix="scan.ignorePattern"
@@ -9,32 +9,40 @@
       {{ $t("ignorePathPattern.desc") }}
     </ListSetting>
 
-    <CheckboxSetting :title="$t('useGitignore')"> </CheckboxSetting>
+    <Setting :title="$t('useGitignore.title')">
+      <RichCheckbox
+        v-model="useGitignore"
+        id="useGitignore"
+        :label="$t('useGitignore.desc')"
+      />
+    </Setting>
   </div>
 </template>
 
 <script setup lang="ts">
+import { RichCheckbox } from "~/_common/components/input";
+
 import { useSettingsStore } from "../_store";
-import CheckboxSetting from "./settings/CheckboxSetting.vue";
 
 import ListSetting from "./settings/ListSetting.vue";
+import Setting from "./settings/Setting.vue";
 
 const store = useSettingsStore();
 const { settings } = storeToRefs(store);
 
 const scan = computed(() => settings.value!.scan ?? null);
-const ignoredExtensions = ref([...scan.value!.ignorePatterns]);
-watch(ignoredExtensions, save);
+const ignoredPatterns = ref([...scan.value!.ignorePatterns]);
+watch(ignoredPatterns, () => save());
 
-const editingKey = ref<string | null>();
-async function save(value: string[]) {
+const useGitignore = ref(scan.value!.useGitignore);
+watch(useGitignore, () => save());
+
+async function save() {
   const s = settings.value!;
   s.scan = {
-    ...s.scan,
-    ignorePatterns: value,
+    ignorePatterns: ignoredPatterns.value,
+    useGitignore: useGitignore.value,
   };
   await store.saveSettings(s);
-
-  editingKey.value = null;
 }
 </script>
