@@ -23,4 +23,5 @@ export enum TFileType {
   ts = "typescript",
   json = "json",
   toml = "toml",
+	unknown = "unknown",
 }

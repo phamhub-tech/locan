@@ -4,7 +4,6 @@
       <h1 class="text__h1">{{ $t("settings", 2) }}</h1>
 
       <Button
-        variant="secondary"
         size="sm"
         class="ml-auto"
         @click="resetSettings"

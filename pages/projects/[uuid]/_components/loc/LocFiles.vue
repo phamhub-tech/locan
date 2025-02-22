@@ -26,7 +26,8 @@
             role="none"
           />
           <div class="flex items-center gap-x-2">
-            <img :src="stat.icon" class="size-6 object-contain" />
+						<UnknownIcon v-if="stat.file === TFileType.unknown" class="size-6 opacity-80" />
+            <img v-else :src="stat.icon" class="size-6 object-contain" />
             <div>
               <p class="font-medium">{{ capitalize(stat.file) }}</p>
               <p class="text-xs text-muted-foreground">
@@ -49,7 +50,8 @@ import { capitalize } from "vue";
 
 import { abbreviateCount } from "~/_common/utils";
 
-import type { ILocScanFile } from "../../_types";
+import { TFileType, type ILocScanFile } from "../../_types";
+import UnknownIcon from "./UnknownIcon.vue";
 
 const props = defineProps<{ data: ILocScanFile[] }>();
 
