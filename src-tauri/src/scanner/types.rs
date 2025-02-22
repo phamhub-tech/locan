@@ -1,6 +1,6 @@
 use serde::Serialize;
 
-use crate::scanner::{ScanFile, ScanResult};
+use super::models::{ScanFile, ScanResult};
 
 #[derive(Debug, Default, Serialize)]
 pub struct LocAnalysis {

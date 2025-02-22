@@ -1,6 +1,5 @@
 <template>
   <Button
-    variant="secondary"
     :loading="apiHandle.isLoading.value"
     @click="scanProject"
   >

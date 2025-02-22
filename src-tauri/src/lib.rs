@@ -27,8 +27,8 @@ pub fn run() {
             projects::add_project,
             projects::get_projects,
             projects::get_project,
-            scanner::get_project_scans,
-            scanner::scan_project,
+            scanner::api::get_project_scans,
+            scanner::api::scan_project,
             settings::api::get_settings,
             settings::api::save_settings,
         ])
