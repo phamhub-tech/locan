@@ -1,28 +1,26 @@
 <template>
-  <div class="space-y-2">
-    <div class="flex justify-en items-center gap-x-2">
-      <h2 class="font-semibold">{{ $t("scans", 2) }}</h2>
-      <DropdownButton
-        :icon="CalendarIcon"
-        :label="$t(selectedDuration)"
-        class="ml-auto"
-      >
-        <DropdownItem
-          v-for="duration of Object.values(TDuration)"
-          :value="duration"
-          @click="selectedDuration = duration"
+  <div class="grid 2xl:grid-cols-3 gap-4">
+    <div class="space-y-3 2xl:col-span-2">
+      <div class="flex items-center gap-x-2">
+        <h2 class="font-semibold">{{ $t("scans", 2) }}</h2>
+        <DropdownButton
+          :icon="CalendarIcon"
+          :label="$t(selectedDuration)"
+          class="ml-auto"
         >
-          {{ $t(duration) }}
-        </DropdownItem>
-      </DropdownButton>
+          <DropdownItem
+            v-for="duration of Object.values(TDuration)"
+            :value="duration"
+            @click="selectedDuration = duration"
+          >
+            {{ $t(duration) }}
+          </DropdownItem>
+        </DropdownButton>
+      </div>
+      <LocChart :scans="data" />
     </div>
 
-    <div class="space-y-4">
-      <div class="grid 2xl:grid-cols-3 gap-4">
-        <LocChart :scans="data" class="2xl:col-span-2" />
-        <LocFiles :data="latestFiles" />
-      </div>
-    </div>
+    <LocFiles :data="latestFiles" />
   </div>
 </template>
 
@@ -62,8 +60,8 @@ const latestFiles = computed<ILocScanFile[]>(() => {
     icon: `/icons/${f.fileType}.svg`,
     file: f.fileType as any,
     loc: f.loc,
-		files: f.files,
-		ext: f.extension,
+    files: f.files,
+    ext: f.extension,
   }));
 });
 
