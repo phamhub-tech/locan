@@ -15,7 +15,7 @@ pub struct AppSettingsManager {
     path: PathBuf,
 }
 impl AppSettingsManager {
-    /// Loads the app settings from the json file
+    /// Loads the app settings to use
     pub fn new(handle: &AppHandle) -> Self {
         let json_path = get_app_data_dir(handle).join("settings.json");
         let mut should_watch_settings = true;
@@ -142,11 +142,15 @@ impl Default for AppSettings {
 pub struct ScanSettings {
     #[serde(default = "ignore_pattern_default")]
     pub ignore_patterns: Vec<String>,
+
+    #[serde(default = "use_gitignore_default")]
+    pub use_gitignore: bool,
 }
 impl Default for ScanSettings {
     fn default() -> Self {
         ScanSettings {
             ignore_patterns: ignore_pattern_default(),
+            use_gitignore: use_gitignore_default(),
         }
     }
 }
@@ -156,4 +160,8 @@ fn ignore_pattern_default() -> Vec<String> {
         .iter()
         .map(|pattern| pattern.to_string())
         .collect()
+}
+
+fn use_gitignore_default() -> bool {
+    true
 }

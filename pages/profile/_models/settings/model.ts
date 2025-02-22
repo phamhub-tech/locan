@@ -11,6 +11,7 @@ export class AppSettings implements IAppSettings {
 		return new AppSettings({
 			scan: {
 				ignorePatterns: scan.ignore_patterns,
+				useGitignore: scan.use_gitignore,
 			}
 		})
 	}
@@ -20,6 +21,7 @@ export class AppSettings implements IAppSettings {
 		return {
 			scan: {
 				ignore_patterns: scan.ignorePatterns,
+				use_gitignore: scan.useGitignore,
 			}
 		}
 	}
