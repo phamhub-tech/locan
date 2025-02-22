@@ -18,13 +18,27 @@ impl AppSettingsManager {
     /// Loads the app settings from the json file
     pub fn new(handle: &AppHandle) -> Self {
         let json_path = get_app_data_dir(handle).join("settings.json");
-        let settings = Self::load_from_file(&json_path).unwrap_or_else(|_| AppSettings::default());
+        let mut should_watch_settings = true;
+        let settings = match Self::load_from_file(&json_path) {
+            Ok(s) => s,
+            Err(e) => {
+                // At this point the settings files does not exist. No need to watch it
+                eprintln!("Failed to load settings: {e}");
+                should_watch_settings = false;
+                AppSettings::default()
+            }
+        };
+
         let manager = Self {
-            settings: Arc::new(Mutex::new(settings)),
+            settings: Arc::new(Mutex::new(settings.clone())),
             path: json_path,
         };
 
-        manager.watch_for_changes();
+        if should_watch_settings {
+            // Only watch for changes if we successfully created the settings file
+            manager.watch_for_changes();
+        }
+
         manager
     }
 
@@ -35,16 +49,45 @@ impl AppSettingsManager {
         println!("Saving new settings: {:?}", new_settings);
 
         // TODO: Handle errors properly
-        let content = serde_json::to_string_pretty(new_settings).unwrap();
-        fs::write(&self.path, content).unwrap();
+        let content = serde_json::to_string_pretty(new_settings)?;
+        fs::write(&self.path, content)?;
         println!("Saved settings.");
         Ok(())
     }
 
-    fn load_from_file<P: AsRef<Path>>(path: P) -> Result<AppSettings, Box<dyn std::error::Error>> {
-        let content = read_to_string(path)?;
-        let settings = serde_json::from_str::<AppSettings>(&content)?;
-        Ok(settings)
+    /// Loads the settings from the provided file path
+    ///
+    /// Returns an io::Error if the file could not be read or if a new empty file
+    /// could not be created
+    fn load_from_file<P: AsRef<Path>>(path: P) -> Result<AppSettings, std::io::Error> {
+        match read_to_string(&path) {
+            Ok(content) => match serde_json::from_str::<AppSettings>(&content) {
+                Ok(settings) => Ok(settings),
+                Err(e) => {
+                    eprintln!("Could not deserialize settings, using default. {e}");
+                    eprintln!("Loaded settings from file: {content}");
+                    Ok(AppSettings::default())
+                }
+            },
+            Err(e) => match e.kind() {
+                std::io::ErrorKind::NotFound => {
+                    println!("Settings file not found. Creating empty file");
+
+                    // TODO: Find a better way to handle the write failed error
+                    match fs::write(&path, r#"{}"#) {
+                        Ok(_) => Ok(AppSettings::default()),
+                        Err(e) => {
+                            eprintln!("Failed to write settings file: {e}");
+                            return Err(e);
+                        }
+                    }
+                }
+                kind => {
+                    eprintln!("Could not read settings file: {kind}");
+                    Err(e)
+                }
+            },
+        }
     }
 
     fn watch_for_changes(&self) {
@@ -56,8 +99,8 @@ impl AppSettingsManager {
             let mut watcher = recommended_watcher(tx).unwrap();
             watcher
                 .watch(&path, notify::RecursiveMode::NonRecursive)
-                .unwrap();
-            println!("Setup file watcher for settings.");
+                .expect("Watch settings file");
+            println!("Watching settings file for changes");
 
             for res in rx.iter() {
                 match res {
