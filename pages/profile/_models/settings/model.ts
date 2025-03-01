@@ -1,4 +1,31 @@
-import type { IAppSettings, IAppSettingsJson, IScanSettings } from "./types";
+import type { IAppSettings, IAppSettingsJson, IScanSettings, IScanSettingsJson } from "./types";
+
+export class ScanSettingsModel implements IScanSettings {
+	public ignorePatterns: string[];
+	public useGitignore: boolean;
+	constructor(data: IScanSettings) {
+		this.ignorePatterns = data.ignorePatterns
+		this.useGitignore = data.useGitignore
+	}
+
+	static buildData(json: IScanSettingsJson): IScanSettings {
+		return {
+			ignorePatterns: json.ignore_patterns,
+			useGitignore: json.use_gitignore,
+		}
+	}
+
+	static fromJson(json: IScanSettingsJson): ScanSettingsModel {
+		return new ScanSettingsModel(this.buildData(json));
+	}
+
+	toJson(): IScanSettingsJson {
+		return {
+			ignore_patterns: this.ignorePatterns,
+			use_gitignore: this.useGitignore,
+		}
+	}
+}
 
 export class AppSettings implements IAppSettings {
 	public scan: IScanSettings;
@@ -7,12 +34,8 @@ export class AppSettings implements IAppSettings {
 	}
 
 	static fromJson(json: IAppSettingsJson): AppSettings {
-		const scan = json.scan;
 		return new AppSettings({
-			scan: {
-				ignorePatterns: scan.ignore_patterns,
-				useGitignore: scan.use_gitignore,
-			}
+			scan: ScanSettingsModel.fromJson(json.scan)
 		})
 	}
 

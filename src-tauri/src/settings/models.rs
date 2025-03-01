@@ -1,5 +1,8 @@
 use std::{
-    fs::{self, read_to_string}, path::{Path, PathBuf}, str::FromStr, sync::{Arc, Mutex}
+    fs::{self, read_to_string},
+    path::{Path, PathBuf},
+    str::FromStr,
+    sync::{Arc, Mutex},
 };
 
 use notify::{recommended_watcher, Watcher};

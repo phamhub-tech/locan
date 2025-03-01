@@ -1,8 +1,11 @@
+
+export interface IScanSettingsJson {
+	ignore_patterns: string[];
+	use_gitignore: boolean;
+}
+
 export interface IAppSettingsJson {
-	scan: {
-		ignore_patterns: string[];
-		use_gitignore: boolean;
-	}
+	scan: IScanSettingsJson
 }
 
 export interface IScanSettings {

@@ -4,6 +4,7 @@ import { delay, getApiMessage } from "~/_common/utils";
 import { ProjectShallowModel, type IProjectScan } from "../_models/project";
 import { projectsService, type IProjectAddPayload, type IProjectScanResult } from "../_services";
 import { ScanFileModel, ScanResultModel } from "../_models/scan";
+import { ProjectSettingsModel } from "../_models/project-settings";
 
 interface IState {
 	projectsApiStatus: TApiStatus;
@@ -16,6 +17,7 @@ interface IState {
 	projectApiStatus: TApiStatus;
 	projectApiMsg: string;
 	project: ProjectShallowModel | null;
+	projectSettings: ProjectSettingsModel | null;
 
 	projectScansApiStatus: TApiStatus;
 	projectScansApiMsg: string;
@@ -37,6 +39,7 @@ const state = (): IState => ({
 	projectApiStatus: TApiStatus.default,
 	projectApiMsg: '',
 	project: null,
+	projectSettings: null,
 
 	projectScansApiStatus: TApiStatus.default,
 	projectScansApiMsg: '',
@@ -69,8 +72,10 @@ export const useProjectsStore = defineStore('projects', {
 				this.projectApiStatus = TApiStatus.loading
 				this.projectApiMsg = ''
 
-				const { data } = await projectsService.getProject(uuid)
-				this.project = ProjectShallowModel.fromJson(data)
+				const { data: { project, settings } } = await projectsService.getProject(uuid)
+				this.project = ProjectShallowModel.fromJson(project)
+				if (settings)
+					this.projectSettings = ProjectSettingsModel.fromJson(settings)
 
 				this.projectApiStatus = TApiStatus.success
 			} catch (e) {
