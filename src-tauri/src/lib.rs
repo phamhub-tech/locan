@@ -24,9 +24,9 @@ pub fn run() {
         })
         .plugin(tauri_plugin_opener::init())
         .invoke_handler(tauri::generate_handler![
-            projects::add_project,
-            projects::get_projects,
-            projects::get_project,
+            projects::api::add_project,
+            projects::api::get_projects,
+            projects::api::get_project,
             scanner::api::get_project_scans,
             scanner::api::scan_project,
             settings::api::get_settings,
