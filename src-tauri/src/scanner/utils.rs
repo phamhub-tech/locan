@@ -28,6 +28,7 @@ pub fn file_type_from_file_name(name: &str) -> String {
     match name {
         "env" | "env.example" => "env",
 
+        "css" => "css",
         "dart" => "dart",
         "gradle" => "gradle",
         "html" => "html",
