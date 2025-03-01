@@ -20,7 +20,7 @@ use crate::{
     api::{ApiError, ApiResponse},
     db::DBConnection,
     projects::models::Project,
-    settings::models::AppSettingsManager,
+    settings::models::{AppSettingsManager, ProjectScanSettings},
 };
 use crate::{api_error, api_response};
 
@@ -68,11 +68,23 @@ pub fn scan_project(
     let root_dir = project.root_dir.clone();
     let mut analysis = HashMap::<String, LocAnalysis>::new();
 
-    let scan_settings = &settings_manager
+    let global_scan_settings = &settings_manager
         .settings
         .lock()
         .expect("Couldn't lock settings")
         .scan;
+
+    let project_scan_settings = ProjectScanSettings::load_from_project_path(&project.root_dir);
+    let scan_settings = match project_scan_settings {
+        Ok(settings) => {
+            println!("Found project settings, merging...");
+            settings.merge_with_global(global_scan_settings)
+        },
+        Err(_) => {
+            println!("Using global settings instead");
+            global_scan_settings.clone()
+        }
+    };
 
     let mut builder = WalkBuilder::new(&root_dir);
     let mut builder = builder.standard_filters(false).hidden(true).parents(true);

@@ -1,7 +1,5 @@
 use std::{
-    fs::{self, read_to_string},
-    path::{Path, PathBuf},
-    sync::{Arc, Mutex},
+    fs::{self, read_to_string}, path::{Path, PathBuf}, str::FromStr, sync::{Arc, Mutex}
 };
 
 use notify::{recommended_watcher, Watcher};
@@ -164,4 +162,31 @@ fn ignore_pattern_default() -> Vec<String> {
 
 fn use_gitignore_default() -> bool {
     true
+}
+
+#[derive(Clone, Debug, Serialize, Deserialize)]
+pub struct ProjectScanSettings {
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub ignore_patterns: Option<Vec<String>>,
+
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub use_gitignore: Option<bool>,
+}
+impl ProjectScanSettings {
+    pub fn load_from_project_path(root_dir: &str) -> Result<Self, std::io::Error> {
+        let path = Path::new(root_dir).join(".locan.json");
+        let content = fs::read_to_string(path)?;
+        let settings = serde_json::from_str(&content)?;
+        Ok(settings)
+    }
+
+    pub fn merge_with_global(&self, global_settings: &ScanSettings) -> ScanSettings {
+        ScanSettings {
+            ignore_patterns: self
+                .ignore_patterns
+                .clone()
+                .unwrap_or(global_settings.ignore_patterns.clone()),
+            use_gitignore: self.use_gitignore.unwrap_or(global_settings.use_gitignore),
+        }
+    }
 }
