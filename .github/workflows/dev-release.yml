@@ -52,8 +52,8 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          tagName: app-v__VERSION__-alpha # the action automatically replaces \_\_VERSION\_\_ with the app version.
-          releaseName: 'App v__VERSION__-alpha'
+          tagName: v__VERSION__-alpha # the action automatically replaces \_\_VERSION\_\_ with the app version.
+          releaseName: 'Locan v__VERSION__-alpha'
           releaseBody: 'See the assets to download this version and install.'
           releaseDraft: true
           prerelease: false
