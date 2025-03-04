@@ -8,7 +8,7 @@
 <div id="badges" align="center">
 
 [![current release](https://img.shields.io/github/release/phamhub-tech/locan.svg)](https://github.com/phamhub-tech/locan/releases)
-[![license](https://img.shields.io/github/license/phamhub-tech/locan.svg)](https://github.com/phamhub-tech/locan/blob/master/LICENSE)
+[![license](https://img.shields.io/github/license/phamhub-tech/locan.svg)](https://github.com/phamhub-tech/locan/blob/main/LICENSE)
 
 [![build status](https://img.shields.io/github/actions/workflow/status/phamhub-tech/locan/dev-release.yml?branch=dev&label=build)](https://github.com/phamhub-tech/locan/actions/workflows/stable-release.yml?query=branch%3Amain)
 </div>
