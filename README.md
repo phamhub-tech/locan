@@ -2,7 +2,7 @@
     <br />
     <img src="./assets/app-icon.svg" height="100px" />
     <h1>Locan</h1>
-	<h3>Your humble <b>L</b>ines <b>O</b>f <b>C</b>ode <b>An</b>alyser</h3>
+	<h3>A glorified <b>L</b>ines <b>O</b>f <b>C</b>ode <b>An</b>alyser</h3>
 </div>
 
 <div id="badges" align="center">
