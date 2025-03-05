@@ -1,6 +1,6 @@
 <template>
-  <div class="grid 2xl:grid-cols-3 gap-4">
-    <div class="space-y-3 2xl:col-span-2">
+  <div class="grid items-start 2xl:grid-cols-3 gap-4">
+    <div class="2xl:sticky top-2 space-y-3 2xl:col-span-2">
       <div class="flex items-center gap-x-2">
         <h2 class="font-semibold">{{ $t("scans", 2) }}</h2>
         <DropdownButton
