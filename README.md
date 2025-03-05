@@ -1,6 +1,6 @@
 <div id="app-logo" align="center">
     <br />
-    <img src="./assets/app-icon.svg" height="100px" />
+    <img src="./assets/app-icon.jpg" height="100px" />
     <h1>Locan</h1>
 	<h3>A glorified <b>L</b>ines <b>O</b>f <b>C</b>ode <b>An</b>alyser</h3>
 </div>
@@ -14,9 +14,8 @@
 </div>
 
 
-## 🚧 **Early Development** 🚧  
-This project is still in early development and may have bugs and be unstable. Please report any issues you encounter.
-
+> [!WARNING]
+> Locan is still under **active development** and features are being added regularly. Things may break or change at any time without notice! Keep an eye out for new releases, report bugs and give feedback on new features you'd like to see.
 
 ## Features
 
