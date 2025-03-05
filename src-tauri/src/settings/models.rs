@@ -1,7 +1,6 @@
 use std::{
     fs::{self, read_to_string},
     path::{Path, PathBuf},
-    str::FromStr,
     sync::{Arc, Mutex},
 };
 
@@ -144,14 +143,14 @@ pub struct ScanSettings {
     #[serde(default = "ignore_pattern_default")]
     pub ignore_patterns: Vec<String>,
 
-    #[serde(default = "use_gitignore_default")]
+    #[serde(default = "bool_default")]
     pub use_gitignore: bool,
 }
 impl Default for ScanSettings {
     fn default() -> Self {
         ScanSettings {
             ignore_patterns: ignore_pattern_default(),
-            use_gitignore: use_gitignore_default(),
+            use_gitignore: bool_default(),
         }
     }
 }
@@ -163,12 +162,15 @@ fn ignore_pattern_default() -> Vec<String> {
         .collect()
 }
 
-fn use_gitignore_default() -> bool {
+fn bool_default() -> bool {
     true
 }
 
 #[derive(Clone, Debug, Serialize, Deserialize)]
 pub struct ProjectScanSettings {
+    #[serde(default = "bool_default")]
+    pub merge_settings: bool,
+
     #[serde(skip_serializing_if = "Option::is_none")]
     pub ignore_patterns: Option<Vec<String>>,
 
@@ -184,11 +186,22 @@ impl ProjectScanSettings {
     }
 
     pub fn merge_with_global(&self, global_settings: &ScanSettings) -> ScanSettings {
+        let ignored_patterns = match &self.ignore_patterns {
+            Some(project_patterns) => {
+                if self.merge_settings {
+                    let mut merged = global_settings.ignore_patterns.clone();
+                    merged.extend(project_patterns.iter().cloned());
+                    merged.dedup();
+                    merged
+                } else {
+                    project_patterns.clone()
+                }
+            }
+            None => global_settings.ignore_patterns.clone(),
+        };
+
         ScanSettings {
-            ignore_patterns: self
-                .ignore_patterns
-                .clone()
-                .unwrap_or(global_settings.ignore_patterns.clone()),
+            ignore_patterns: ignored_patterns,
             use_gitignore: self.use_gitignore.unwrap_or(global_settings.use_gitignore),
         }
     }

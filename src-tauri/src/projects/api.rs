@@ -38,7 +38,6 @@ pub fn get_project(
     })?;
 
     let settings = ProjectScanSettings::load_from_project_path(&project.root_dir);
-    println!("S: {:?}", settings);
     Ok(api_response!(ProjectResponse {
         project,
         settings: settings.ok()

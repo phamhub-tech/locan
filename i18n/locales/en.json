@@ -1,5 +1,10 @@
 {
+	"done": "Done",
 	"projectSettings": "Project Settings",
+	"mergeSettings": {
+		"title": "Merge settings",
+		"desc": "If checked, these project settings will be merged with the global settings, otherwise these settings will override the global settings"
+	},
 	"theme": "Theme",
 	"settings": "Settings",
 	"files": "File | Files",
