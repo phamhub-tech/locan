@@ -70,7 +70,6 @@ pub fn save_project_settings(
     root_dir: String,
     new_settings: ProjectScanSettings,
 ) -> Result<ApiResponse<String>, ApiError> {
-
     ProjectScanSettings::save(&root_dir, &new_settings).map_err(|e| api_error!(e.to_string()))?;
     Ok(api_response!("Settings saved".to_string()))
 }

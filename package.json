@@ -20,6 +20,7 @@
     "@tauri-apps/api": "^2",
     "@tauri-apps/plugin-dialog": "~2.2.0",
     "@tauri-apps/plugin-opener": "^2",
+    "@tauri-apps/plugin-updater": "~2",
     "@turf/turf": "^7.1.0",
     "@types/topojson-client": "^3.1.5",
     "@unovis/ts": "^1.5.0",
