@@ -23,6 +23,10 @@
         />
       </Setting>
     </div>
+
+		<template #footer="{ close }">
+      <Button @click="close">{{ $t("done") }}</Button>
+    </template>
   </Modal>
 </template>
 
@@ -46,8 +50,8 @@ const useGitignore = ref(settings.value!.useGitignore ?? false);
 watch(useGitignore, () => save());
 
 async function save() {
-	let ignored: string[] | undefined = ignoredPatterns.value;
-	if (ignored.length === 0) ignored = undefined
+  let ignored: string[] | undefined = ignoredPatterns.value;
+  if (ignored.length === 0) ignored = undefined;
 
   await store.saveSettings(project.value!.rootDir, {
     ignore_patterns: ignored,

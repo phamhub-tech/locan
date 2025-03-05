@@ -15,7 +15,7 @@
         <Input
           v-if="editingKey === getEntryKey(entry)"
           :id="getEntryKey(entry)"
-					:placeholder="placeholder"
+          :placeholder="placeholder"
           class="h-7 px-2"
           @blur="save(getEntryKey(entry), i)"
           @keyup.enter="save(getEntryKey(entry), i)"
@@ -53,7 +53,6 @@
               <PencilIcon class="!size-4" />
             </Button>
             <Button
-              v-if="setting.length > 1"
               variant="ghost"
               size="icon"
               class="size-7"
@@ -76,21 +75,28 @@
 <script setup lang="ts">
 import { PencilIcon, PlusIcon, Trash2Icon } from "lucide-vue-next";
 
-const props = defineProps<{ title: string; keyPrefix: string, placeholder?: string }>();
+const props = defineProps<{
+  title: string;
+  keyPrefix: string;
+  placeholder?: string;
+}>();
 const setting = defineModel<string[]>({ required: true });
 
 const editingKey = ref<string | null>();
 const settingToUse = ref<string[]>(Array.from(setting.value));
-const settingToUseLast = computed<string>(
-  () => settingToUse.value[settingToUse.value.length - 1],
-);
+const settingToUseLast = computed<string | undefined>(() => {
+  const s = settingToUse.value;
+  if (s.length) return settingToUse.value[s.length - 1];
+
+  return;
+});
 
 function getEntryKey(value: string) {
   return `${props.keyPrefix}.${value ? value : "new"}`;
 }
 
 function newItem() {
-  if (settingToUseLast.value.trim() === "") return;
+  if (settingToUseLast.value?.trim() === "") return;
 
   settingToUse.value.push("");
   enableEdit(getEntryKey(""), "");
@@ -111,7 +117,7 @@ function save(key: string, index: number, useValue = true) {
 
       settingToUse.value[index] = value;
 
-			// Create a new array so that listeners can be triggered
+      // Create a new array so that listeners can be triggered
       setting.value = Array.from(settingToUse.value);
     }
   }
