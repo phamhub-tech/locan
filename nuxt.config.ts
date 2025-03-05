@@ -65,7 +65,7 @@ export default defineNuxtConfig({
 	colorMode: {
 		classSuffix: '',
 		storageKey: 'theme',
-		preference: 'dark',
+		preference: 'light',
 	},
 	fonts: {
 		//families: [

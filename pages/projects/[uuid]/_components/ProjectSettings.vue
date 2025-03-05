@@ -1,41 +1,29 @@
 <template>
-  <Modal :title="$t('projectSettings')">
-    <template #trigger>
-      <Button variant="outline" size="icon">
-        <SettingsIcon />
-      </Button>
-    </template>
+	<Modal :title="$t('projectSettings')">
+		<template #trigger>
+			<Button variant="outline" size="icon">
+				<SettingsIcon />
+			</Button>
+		</template>
 
-    <div class="text-sm space-y-6">
-      <Setting :title="$t('mergeSettings.title')">
-        <RichCheckbox
-          v-model="useGitignore"
-          id="merge-settings"
-          :label="$t('mergeSettings.desc')"
-        />
-      </Setting>
+		<div class="text-sm space-y-6">
+			<Setting :title="$t('mergeSettings.title')">
+				<RichCheckbox v-model="useGitignore" id="merge-settings" :label="$t('mergeSettings.desc')" />
+			</Setting>
 
-      <Setting :title="$t('useGitignore.title')">
-        <RichCheckbox
-          v-model="useGitignore"
-          id="useGitignore"
-          :label="$t('useGitignore.desc')"
-        />
-      </Setting>
-      <ListSetting
-        v-model="ignoredPatterns"
-        :title="$t('ignorePathPattern.title')"
-        :placeholder="$t('excludePattern')"
-        key-prefix="scan.ignorePattern"
-      >
-        {{ $t("ignorePathPattern.desc") }}
-      </ListSetting>
-    </div>
+			<Setting :title="$t('useGitignore.title')">
+				<RichCheckbox v-model="useGitignore" id="useGitignore" :label="$t('useGitignore.desc')" />
+			</Setting>
+			<ListSetting v-model="ignoredPatterns" :title="$t('ignorePathPattern.title')" :placeholder="$t('excludePattern')"
+				key-prefix="scan.ignorePattern">
+				{{ $t("ignorePathPattern.desc") }}
+			</ListSetting>
+		</div>
 
-    <template #footer="{ close }">
-      <Button @click="close">{{ $t("done") }}</Button>
-    </template>
-  </Modal>
+		<template #footer="{ close }">
+			<Button @click="close">{{ $t("done") }}</Button>
+		</template>
+	</Modal>
 </template>
 
 <script setup lang="ts">
@@ -51,7 +39,7 @@ const store = useProjectsStore();
 const { projectSettings: settings, project } = storeToRefs(store);
 
 const ignoredPatterns = ref(
-  settings.value!.ignorePatterns ? [...settings.value!.ignorePatterns] : [],
+	settings.value!.ignorePatterns ? [...settings.value!.ignorePatterns] : [],
 );
 watch(ignoredPatterns, () => save());
 
@@ -62,13 +50,13 @@ const mergeSettings = ref(settings.value!.mergeSettings ?? false);
 watch(mergeSettings, () => save());
 
 async function save() {
-  let ignored: string[] | undefined = ignoredPatterns.value;
-  if (ignored.length === 0) ignored = undefined;
+	let ignored: string[] | undefined = ignoredPatterns.value;
+	if (ignored.length === 0) ignored = undefined;
 
-  await store.saveSettings(project.value!.rootDir, {
+	await store.saveSettings(project.value!.rootDir, {
 		merge_settings: mergeSettings.value,
-    ignore_patterns: ignored,
-    use_gitignore: useGitignore.value,
-  });
+		ignore_patterns: ignored,
+		use_gitignore: useGitignore.value,
+	});
 }
 </script>
