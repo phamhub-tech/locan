@@ -6,7 +6,10 @@
     @submit="onSubmit"
   >
     <template #trigger>
-      <Button> {{ $t("createProject") }} </Button>
+      <Button>
+        <PlusIcon />
+        {{ $t("createProject") }}
+      </Button>
     </template>
 
     <FormField v-slot="{ componentField: { modelValue } }" name="rootDir">
@@ -57,7 +60,6 @@ import {
   FormControl,
   FormField,
   FormItem,
-  FormLabel,
   FormMessage,
 } from "~/_common/components/ui/form";
 import { Input } from "~/_common/components/ui/input";
@@ -66,6 +68,7 @@ import { useApiHandle } from "~/_common/core/api/composables";
 
 import { useProjectsStore } from "../_store/projects";
 import { selectDirectory } from "~/_common/core/dialog";
+import { PlusIcon } from "lucide-vue-next";
 
 const isOpen = ref(false);
 

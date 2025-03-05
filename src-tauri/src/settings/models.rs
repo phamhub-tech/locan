@@ -177,7 +177,7 @@ pub struct ProjectScanSettings {
 }
 impl ProjectScanSettings {
     pub fn load_from_project_path(root_dir: &str) -> Result<Self, std::io::Error> {
-        let path = Path::new(root_dir).join(".locan.json");
+        let path = Self::get_path_from_root(root_dir);
         let content = fs::read_to_string(path)?;
         let settings = serde_json::from_str(&content)?;
         Ok(settings)
@@ -191,5 +191,20 @@ impl ProjectScanSettings {
                 .unwrap_or(global_settings.ignore_patterns.clone()),
             use_gitignore: self.use_gitignore.unwrap_or(global_settings.use_gitignore),
         }
+    }
+
+    pub fn save(root_dir: &str, new_settings: &ProjectScanSettings) -> Result<(), std::io::Error> {
+        println!("Saving new project settings: {:?}", new_settings);
+
+        // TODO: Handle errors properly
+        let content = serde_json::to_string_pretty(new_settings)?;
+        let path = Self::get_path_from_root(root_dir);
+        fs::write(&path, content)?;
+        println!("Saved project settings.");
+        Ok(())
+    }
+
+    fn get_path_from_root(root_dir: &str) -> PathBuf {
+        Path::new(root_dir).join(".locan.json").to_owned()
     }
 }

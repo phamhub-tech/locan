@@ -29,5 +29,5 @@ pub fn save_settings(
         .save(&new_settings)
         .map_err(|e| api_error!(e.to_string()))?;
 
-    Ok(api_response!("".to_string()))
+    Ok(api_response!("Settings saved".to_string()))
 }

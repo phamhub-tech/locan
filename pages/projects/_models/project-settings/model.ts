@@ -1,17 +1,24 @@
-import { ScanSettingsModel } from "~/pages/profile/_models/settings";
 import type { IProjectSettings, IProjectSettingsJson } from "./types";
 
-export class ProjectSettingsModel extends ScanSettingsModel implements IProjectSettings {
+export class ProjectSettingsModel implements IProjectSettings {
+	public ignorePatterns?: string[] | undefined;
+	public useGitignore?: boolean | undefined;
+	constructor(data: IProjectSettings) {
+		this.ignorePatterns = data.ignorePatterns
+		this.useGitignore = data.useGitignore
+	}
 
-	static override fromJson(json: IProjectSettingsJson): ProjectSettingsModel {
+	static fromJson(json: IProjectSettingsJson): ProjectSettingsModel {
 		return new ProjectSettingsModel({
-			...super.buildData(json)
+			ignorePatterns: json.ignore_patterns,
+			useGitignore: json.use_gitignore,
 		})
 	}
 
-	override toJson(): IProjectSettingsJson {
+	toJson(): IProjectSettingsJson {
 		return {
-			...super.toJson(),
+			ignore_patterns: this.ignorePatterns,
+			use_gitignore: this.useGitignore
 		}
 	}
 }

@@ -193,11 +193,11 @@ const auxRoutes = computed<IRoute[]>(() => {
       name: i18n.t("settings"),
       route: { name: getRouteName("profile") },
     },
-    {
-      icon: HelpIcon,
-      name: i18n.t("help"),
-      route: { name: getRouteName("help") },
-    },
+    //{
+    //  icon: HelpIcon,
+    //  name: i18n.t("help"),
+    //  route: { name: getRouteName("help") },
+    //},
   ];
 });
 

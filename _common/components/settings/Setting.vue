@@ -1,6 +1,6 @@
 <template>
   <div>
-    <p class="text-muted-foreground font-semibold text-xs">
+    <p class="text-muted-foreground font-semibold text-sm">
       {{ title }}
     </p>
     <div class="text-sm mt-0.5">

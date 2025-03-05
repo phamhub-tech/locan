@@ -3,7 +3,7 @@
 		<h1 class="text__h1">{{ $t('projects', 2)}}</h1>
 
     <div class="flex gap-x-4 justify-between items-center">
-      <div class="flex gap-x-2 items-center shrink-0">
+      <div class="hidden lex gap-x-2 items-center shrink-0">
         <Input :placeholder="$t('search')" class="max-w-72" />
         <DropdownMenu>
           <DropdownMenuTrigger as-child>
@@ -16,6 +16,8 @@
           </DropdownMenuTrigger>
         </DropdownMenu>
       </div>
+
+			<p class="font-semibold">{{ $t('projectsCount', store.projects?.length ?? 0 )}}</p>
 
       <ProjectCreate />
     </div>
@@ -36,6 +38,7 @@ import { Input } from "~/_common/components/ui/input";
 
 import Projects from "./_components/Projects.vue";
 import ProjectCreate from "./_components/ProjectCreate.vue";
+import { useProjectsStore } from "./_store/projects";
 
 const i18n = useI18n();
 definePageMeta({
@@ -46,4 +49,6 @@ definePageMeta({
 useSeoMeta({
   title: i18n.t("projects", 2),
 });
+
+const store = useProjectsStore()
 </script>

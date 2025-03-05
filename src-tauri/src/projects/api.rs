@@ -37,8 +37,12 @@ pub fn get_project(
         _ => api_error!(e.to_string()),
     })?;
 
-    let settings = ProjectScanSettings::load_from_project_path(&project.uuid).ok();
-    Ok(api_response!(ProjectResponse { project, settings }))
+    let settings = ProjectScanSettings::load_from_project_path(&project.root_dir);
+    println!("S: {:?}", settings);
+    Ok(api_response!(ProjectResponse {
+        project,
+        settings: settings.ok()
+    }))
 }
 
 #[tauri::command]
@@ -60,4 +64,14 @@ pub fn add_project(
     };
     project.save(conn).map_err(|e| api_error!(e.to_string()))?;
     Ok(api_response!(project))
+}
+
+#[tauri::command]
+pub fn save_project_settings(
+    root_dir: String,
+    new_settings: ProjectScanSettings,
+) -> Result<ApiResponse<String>, ApiError> {
+
+    ProjectScanSettings::save(&root_dir, &new_settings).map_err(|e| api_error!(e.to_string()))?;
+    Ok(api_response!("Settings saved".to_string()))
 }

@@ -4,7 +4,7 @@ import { delay, getApiMessage } from "~/_common/utils";
 import { ProjectShallowModel, type IProjectScan } from "../_models/project";
 import { projectsService, type IProjectAddPayload, type IProjectScanResult } from "../_services";
 import { ScanFileModel, ScanResultModel } from "../_models/scan";
-import { ProjectSettingsModel } from "../_models/project-settings";
+import { ProjectSettingsModel, type IProjectSettingsJson } from "../_models/project-settings";
 
 interface IState {
 	projectsApiStatus: TApiStatus;
@@ -26,6 +26,9 @@ interface IState {
 
 	projectScanResultsApiStatus: TApiStatus;
 	projectScanResultsApiMsg: string;
+
+	saveProjectSettingsApiStatus: TApiStatus,
+	saveProjectSettingsApiMsg: string,
 }
 
 const state = (): IState => ({
@@ -48,6 +51,9 @@ const state = (): IState => ({
 
 	projectScanResultsApiStatus: TApiStatus.default,
 	projectScanResultsApiMsg: '',
+
+	saveProjectSettingsApiStatus: TApiStatus.default,
+	saveProjectSettingsApiMsg: '',
 })
 
 export const useProjectsStore = defineStore('projects', {
@@ -162,6 +168,20 @@ export const useProjectsStore = defineStore('projects', {
 			} catch (e) {
 				this.projectScanResultsApiStatus = TApiStatus.error
 				this.projectScanResultsApiMsg = getApiMessage(e)
+			}
+		},
+		async saveSettings(rootDir: string, settings: IProjectSettingsJson) {
+			try {
+				this.saveProjectSettingsApiStatus = TApiStatus.loading
+				this.saveProjectSettingsApiMsg = '';
+
+				await projectsService.saveSettings(rootDir, settings)
+				this.projectSettings = ProjectSettingsModel.fromJson(settings);
+
+				this.saveProjectSettingsApiStatus = TApiStatus.success
+			} catch(e) {
+				this.saveProjectSettingsApiStatus = TApiStatus.error
+				this.saveProjectSettingsApiMsg = getApiMessage(e);
 			}
 		},
 	}

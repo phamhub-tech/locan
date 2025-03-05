@@ -1,4 +1,5 @@
 {
+	"projectSettings": "Project Settings",
 	"theme": "Theme",
 	"settings": "Settings",
 	"files": "File | Files",
@@ -13,6 +14,7 @@
 	"search": "Search",
 	"loc": "Lines of code",
 	"projects": "Project | Projects",
+	"projectsCount": "1 Project | {count} Projects",
 	"help": "Help",
 	"updated": "Updated",
 	"filter": "Filter",

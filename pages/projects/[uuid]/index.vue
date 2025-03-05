@@ -6,7 +6,10 @@
     <div class="space-y-2">
       <section class="flex items-center justify-between">
         <h1 class="text__h1">{{ project.name }}</h1>
-        <ProjectScan v-if="project" :project="project" />
+        <div class="flex items-center gap-x-1" v-if="project">
+          <ProjectSettings />
+					<ProjectScan :project="project" />
+        </div>
       </section>
 
       <section class="text-sm flex border-y divide-x">
@@ -54,6 +57,7 @@ import ProjectScan from "./_components/ProjectScan.vue";
 import Status from "~/_common/components/Status.vue";
 import { delimit, humanizeDate } from "~/_common/utils";
 import LocTrend from "./_components/loc/LocTrend.vue";
+import ProjectSettings from "./_components/ProjectSettings.vue";
 
 definePageMeta({ name: "project-details" });
 

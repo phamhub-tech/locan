@@ -22,10 +22,8 @@
 <script setup lang="ts">
 import { RichCheckbox } from "~/_common/components/input";
 
+import { ListSetting, Setting } from "~/_common/components/settings"
 import { useSettingsStore } from "../_store";
-
-import ListSetting from "./settings/ListSetting.vue";
-import Setting from "./settings/Setting.vue";
 
 const store = useSettingsStore();
 const { settings } = storeToRefs(store);
