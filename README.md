@@ -1,6 +1,6 @@
 <div id="app-logo" align="center">
     <br />
-    <img src="./assets/app-icon.jpg" height="100px" />
+    <img src="./assets/app-icon.png" height="100px" />
     <h1>Locan</h1>
 	<h3>A glorified <b>L</b>ines <b>O</b>f <b>C</b>ode <b>An</b>alyser</h3>
 </div>
