@@ -79,7 +79,7 @@ pub fn scan_project(
         Ok(settings) => {
             println!("Found project settings, merging...");
             settings.merge_with_global(global_scan_settings)
-        },
+        }
         Err(_) => {
             println!("Using global settings instead");
             global_scan_settings.clone()

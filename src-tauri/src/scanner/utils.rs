@@ -14,7 +14,7 @@ pub fn get_extension_from_path(path: &str) -> Option<String> {
         if let Some(cap) = captures.get(1) {
             return Some(cap.as_str().to_string());
         }
-    } else  {
+    } else {
         if let Some(ext) = path.split(".").last() {
             return Some(ext.to_string());
         }

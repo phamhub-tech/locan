@@ -15,11 +15,6 @@
 <script setup lang="ts">
 import Sidenav from "~/_common/components/nav/Sidenav.vue";
 
-import { useSettingsStore } from "~/pages/profile/_store";
-
-const store = useSettingsStore()
-store.getSettings()
-
 const sidenavMinimised = ref(true);
 onMounted(() => (sidenavMinimised.value = window.innerWidth < 1024));
 </script>

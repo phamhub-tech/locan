@@ -1,6 +1,6 @@
 [package]
 name = "locan"
-version = "0.1.2"
+version = "0.1.4"
 description = "A glorified lines of code analyser"
 authors = ["you"]
 edition = "2021"
@@ -32,4 +32,7 @@ notify = { version = "8.0.0", features = ["serde"] }
 globset = "0.4.15"
 regex = "1.11.1"
 ignore = "0.4.23"
+
+[target.'cfg(not(any(target_os = "android", target_os = "ios")))'.dependencies]
+tauri-plugin-updater = "2"
 

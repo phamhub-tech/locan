@@ -78,8 +78,6 @@ export const useSettingsStore = defineStore('settings', {
 		},
 
 		init() {
-			if (import.meta.server) return;
-
 			const savedSettings = {
 				..._defaultSettings,
 				...loadSettings()
