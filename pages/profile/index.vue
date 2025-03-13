@@ -37,7 +37,7 @@
 </template>
 
 <script setup lang="ts">
-import { RefreshCwIcon } from "lucide-vue-next";
+import { RefreshCwIcon, CloudDownloadIcon } from "lucide-vue-next";
 
 import {
   Tabs,
@@ -70,7 +70,7 @@ const settingsCategories: ISettingsCategory[] = [
     content: ScanSettings,
   },
   {
-    icon: SettingsIcon,
+    icon: CloudDownloadIcon,
     key: "update",
     title: i18n.t("update"),
     content: UpdateSettings,
