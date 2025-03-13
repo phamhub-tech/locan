@@ -15,14 +15,14 @@
           </p>
           <div
             v-if="!isCheckingForUpdate"
-            :class="['mt-1 h-3 rounded-full overflow-hidden bg-slate-200']"
+            class="mt-1 h-3 rounded-[100000px] overflow-hidden bg-slate-200"
             role="progressbar"
           >
             <div
               :style="{
                 width: `${updateDownloadPercentage}%`,
               }"
-              class="bg-primary rounded-full h-full transition-all duration-300"
+              class="bg-primary h-full transition-all duration-300"
               role="none"
             />
           </div>
@@ -55,20 +55,21 @@
             'w-20 bg-opacity-15 text-foreground': apiHandle.isLoading.value,
           }"
           :disabled="apiHandle.isLoading.value"
+					@click="actOnUpdate"
         >
           {{
             apiHandle.isLoading.value
               ? `${updateDownloadPercentage}%`
               : apiHandle.isSuccess.value && updateInfo
-                ? $t("instal&Restart")
+                ? $t("install&Restart")
                 : $t("download&Install")
           }}
         </Button>
       </FadeTransition>
     </section>
 
-    <div v-if="updateInfo">
-			<p class="text__h2 capitalize">{{ appInfo!.name }} v{{ updateInfo.version }}</p>
+    <section v-if="updateInfo">
+			<p class="text__h2"><span class="capitalize">{{ appInfo!.name }}</span> v{{ updateInfo.version }}</p>
       <p v-if="updateInfo.date" class="text-sm text-muted-foreground">
         {{
           humanizeDate(
@@ -81,11 +82,11 @@
         }}
       </p>
 
-      <div v-if="updateInfo.body" class="mt-2">
-        <p class="font-medium text-sm mb-2">{{ $t("notes") }}</p>
+      <!-- div v-if="updateInfo.body" class="mt-4">
+        <p class="font-semibold text-sm">{{ $t("notes") }}</p>
         <p>{{ updateInfo.body }}</p>
-      </div>
-    </div>
+      </div -->
+    </section>
   </div>
 </template>
 
@@ -117,4 +118,8 @@ const isCheckingForUpdate = computed<boolean>(() => {
 const updateDownloadPercentage = computed<number>(() => {
   return Math.floor((updateDownloadProgress.value ?? 0) * 100);
 });
+
+function actOnUpdate() {
+	store.updateApp()
+}
 </script>

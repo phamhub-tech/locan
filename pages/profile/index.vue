@@ -11,7 +11,7 @@
 
     <hr />
 
-    <Tabs v-if="settings" default-value="update" class="flex gap-x-4 items-start">
+    <Tabs v-if="settings" default-value="scan" class="flex gap-x-4 items-start">
       <TabsList class="flex-col w-32">
         <TabsTrigger
           v-for="{ key, title, icon } of settingsCategories"

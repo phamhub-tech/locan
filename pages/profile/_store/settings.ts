@@ -1,3 +1,6 @@
+import { relaunch } from '@tauri-apps/plugin-process'
+import type { Theme } from '@tauri-apps/api/window'
+
 import { pageSizeOptions } from '~/_common/constants'
 
 import type { ISavedSettings, ISettings, ILanguage } from '../_types'
@@ -6,7 +9,6 @@ import { AppSettings } from '../_models/settings'
 import { getApiMessage } from '~/_common/utils'
 import { settingsService } from '../_service'
 import { check, Update } from '@tauri-apps/plugin-updater'
-import type { Theme } from '@tauri-apps/api/window'
 import { AppInfo } from '../_models/app-info'
 
 
@@ -168,7 +170,7 @@ export const useSettingsStore = defineStore('settings', {
 				};
 
 				console.log(
-					`found update ${update.version} from ${update.date} with notes ${update.body}`,
+					`found update ${update.available} ${update.version} from ${update.date} with notes ${update.body}`,
 				);
 
 				let contentLength = 0;
@@ -201,6 +203,7 @@ export const useSettingsStore = defineStore('settings', {
 			if (update === null) return;
 
 			await update.install()
+			await relaunch()
 		},
 
 		resetSettings() {

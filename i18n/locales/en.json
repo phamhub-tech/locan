@@ -7,9 +7,11 @@
 	"currentVersion": "Current version: v{version}",
 	"downloadingUpdate": "Downloading update...",
 	"checkingUpdate": "Checking for update...",
+	"install&Restart": "Restart to apply update",
 	"installUpdate": "Install update",
 	"alreadyUpdated": "You are already on the latest version",
 	"done": "Done",
+	"notes": "Notes",
 	"projectSettings": "Project Settings",
 	"mergeSettings": {
 		"title": "Merge settings",
