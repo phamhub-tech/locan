@@ -1,4 +1,14 @@
 {
+	"update": "Update",
+	"appUpdates": "App updates",
+	"updateDownloaded": "Update downloaded",
+	"download&Install": "Download & Install",
+	"updateAvailable": "Update available",
+	"currentVersion": "Current version: v{version}",
+	"downloadingUpdate": "Downloading update...",
+	"checkingUpdate": "Checking for update...",
+	"installUpdate": "Install update",
+	"alreadyUpdated": "You are already on the latest version",
 	"done": "Done",
 	"projectSettings": "Project Settings",
 	"mergeSettings": {

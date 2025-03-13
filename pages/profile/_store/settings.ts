@@ -5,6 +5,9 @@ import { TApiStatus } from '~/_common/core/api'
 import { AppSettings } from '../_models/settings'
 import { getApiMessage } from '~/_common/utils'
 import { settingsService } from '../_service'
+import { check, Update } from '@tauri-apps/plugin-updater'
+import type { Theme } from '@tauri-apps/api/window'
+import { AppInfo } from '../_models/app-info'
 
 
 const languages: ILanguage[] = [
@@ -21,6 +24,7 @@ const _defaultSettings: ISettings = {
 }
 
 interface IState extends ISettings {
+	appInfo: AppInfo | null;
 	languages: ILanguage[];
 	activeLanguage: ILanguage;
 
@@ -32,6 +36,14 @@ interface IState extends ISettings {
 
 	saveSettingsApiStatus: TApiStatus;
 	saveSettingsApiMsg: string;
+
+	updateDownloadApiStatus: TApiStatus,
+	updateDownloadApiMsg: string,
+	update: Update | null,
+	updateSizeTotal: number | null;
+	updateSizeDownloaded: number | null;
+	updateDownloadProgress: number | null;
+	updateDownloadMsg: string;
 }
 
 const storeStorageKey = 'settings'
@@ -42,6 +54,8 @@ function loadSettings(): ISavedSettings | null {
 
 const state = (): IState => {
 	return {
+		appInfo: null,
+
 		..._defaultSettings,
 		languages,
 
@@ -51,6 +65,14 @@ const state = (): IState => {
 
 		saveSettingsApiStatus: TApiStatus.default,
 		saveSettingsApiMsg: '',
+
+		updateDownloadApiStatus: TApiStatus.default,
+		updateDownloadApiMsg: '',
+		update: null,
+		updateSizeTotal: null,
+		updateSizeDownloaded: null,
+		updateDownloadProgress: null,
+		updateDownloadMsg: '',
 	}
 }
 
@@ -58,6 +80,7 @@ export const useSettingsStore = defineStore('settings', {
 	state,
 	getters: {
 		storageKey: () => storeStorageKey,
+		updateExists: (state) => state.update !== null && state.update.available,
 	},
 	actions: {
 		setLanguage(language: ILanguage) {
@@ -77,7 +100,11 @@ export const useSettingsStore = defineStore('settings', {
 			$storage.setItem(this.storageKey, settings, true)
 		},
 
-		init() {
+		async init() {
+			const info = new AppInfo();
+			await info.build();
+			this.appInfo = info;
+
 			const savedSettings = {
 				..._defaultSettings,
 				...loadSettings()
@@ -89,6 +116,12 @@ export const useSettingsStore = defineStore('settings', {
 
 			this.activeLanguage = activeLanguage
 			this.getSettings()
+			this.checkAndDownloadUpdate()
+		},
+		setTheme(theme: Theme | null) {
+			const colorMode = useColorMode();
+			colorMode.preference = theme ?? 'system';
+			this.appInfo!.theme = theme;
 		},
 
 		async getSettings() {
@@ -116,11 +149,60 @@ export const useSettingsStore = defineStore('settings', {
 				this.settings = settings;
 
 				this.saveSettingsApiStatus = TApiStatus.success
-			} catch(e) {
+			} catch (e) {
 				this.saveSettingsApiStatus = TApiStatus.error
 				this.saveSettingsApiMsg = getApiMessage(e);
 			}
 		},
+
+		async checkAndDownloadUpdate() {
+			try {
+				this.updateDownloadApiStatus = TApiStatus.loading;
+				this.updateDownloadApiMsg = '';
+
+				const update = await check();
+				this.update = update;
+				if (update === null) {
+					this.updateDownloadApiStatus = TApiStatus.success;
+					return;
+				};
+
+				console.log(
+					`found update ${update.version} from ${update.date} with notes ${update.body}`,
+				);
+
+				let contentLength = 0;
+				await update.download((event) => {
+					switch (event.event) {
+						case "Started":
+							contentLength = event.data.contentLength ?? 0;
+							this.updateSizeTotal = contentLength
+							this.updateSizeDownloaded = 0;
+							break;
+						case "Progress":
+							this.updateSizeDownloaded! += event.data.chunkLength;
+							this.updateDownloadProgress = this.updateSizeDownloaded! / this.updateSizeTotal!;
+							break;
+						case "Finished":
+							console.log("download finished");
+							break;
+					}
+				});
+
+				this.updateDownloadApiStatus = TApiStatus.success;
+			} catch (e) {
+				this.updateDownloadApiStatus = TApiStatus.error;
+				this.updateDownloadApiMsg = getApiMessage(e);
+			}
+		},
+
+		async updateApp() {
+			const update = this.update;
+			if (update === null) return;
+
+			await update.install()
+		},
+
 		resetSettings() {
 			settingsService.resetSettings()
 		},

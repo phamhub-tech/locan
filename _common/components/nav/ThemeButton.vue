@@ -7,27 +7,31 @@
 </template>
 
 <script setup lang="ts">
+import type { Theme } from "@tauri-apps/api/window";
 import { MonitorIcon, MoonIcon, SunIcon } from "lucide-vue-next";
+import { useSettingsStore } from "~/pages/profile/_store";
 
 defineProps<{as: string | Component}>()
 
-const colorMode = useColorMode();
+const store = useSettingsStore()
+const { appInfo } = storeToRefs(store)
+
 const icon = computed(() => {
-  const pref = colorMode.preference;
+  const theme = appInfo.value?.theme;
 
   let icon = MonitorIcon;
-  if (pref === "light") icon = SunIcon;
-  else if (pref === "dark") icon = MoonIcon;
+  if (theme === "light") icon = SunIcon;
+  else if (theme === "dark") icon = MoonIcon;
 
   return icon;
 });
 
 function toggle() {
-  const pref = colorMode.preference;
-  let mode = "system";
-  if (pref === "system") mode = "dark";
-  else if (pref === "dark") mode = "light";
+  const theme = appInfo.value?.theme ?? null;
+  let mode: Theme | null = null;
+  if (theme === null) mode = "dark";
+  else if (theme === "dark") mode = "light";
 
-  colorMode.preference = mode;
+	store.setTheme(mode)
 }
 </script>

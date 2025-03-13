@@ -27,8 +27,7 @@
 </template>
 
 <script setup lang="ts">
-import { SlidersVerticalIcon as SettingsIcon } from "lucide-vue-next";
-
+import { SettingsIcon } from "~/_common/components/icons";
 import Modal from "~/_common/components/Modal.vue";
 import { ListSetting, Setting } from "~/_common/components/settings";
 import RichCheckbox from "~/_common/components/input/checkbox/RichCheckbox.vue";

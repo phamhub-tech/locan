@@ -27,7 +27,7 @@
               class="pointer-events-none !rounded-r-none"
               disabled
             />
-            <Button class="rounded-l-none">{{ $t("browse") }}</Button>
+            <Button class="rounded-l-none" type="button">{{ $t("browse") }}</Button>
           </div>
         </FormControl>
         <FormMessage />

@@ -139,10 +139,11 @@ import {
   CircleHelpIcon as HelpIcon,
   BriefcaseBusinessIcon as ProjectsIcon,
   UserRoundIcon as UserIcon,
-  SlidersVertical as SettingsIcon,
 } from "lucide-vue-next";
 
 import { cn, getRouteName } from "~/_common/utils";
+
+import { SettingsIcon } from "../icons";
 
 import ThemeButton from "./ThemeButton.vue";
 

@@ -1,0 +1,120 @@
+<template>
+  <div class="space-y-4">
+    <h2 class="text__h2">{{ $t("appUpdates") }}</h2>
+
+    <section class="border-y py-3 flex items-center justify-between gap-x-4">
+      <div class="flex-1">
+        <!-- is downloading update -->
+        <template v-if="apiHandle.isLoading.value">
+          <p>
+            {{
+              isCheckingForUpdate
+                ? $t("checkingUpdate")
+                : $t("downloadingUpdate")
+            }}
+          </p>
+          <div
+            v-if="!isCheckingForUpdate"
+            :class="['mt-1 h-3 rounded-full overflow-hidden bg-slate-200']"
+            role="progressbar"
+          >
+            <div
+              :style="{
+                width: `${updateDownloadPercentage}%`,
+              }"
+              class="bg-primary rounded-full h-full transition-all duration-300"
+              role="none"
+            />
+          </div>
+          <p v-if="updateInfo" class="mt-2 text-sm text-muted-foreground">
+            {{ $t("currentVersion", { version: appInfo!.version }) }}
+          </p>
+        </template>
+        <!-- update downloaded but not installed -->
+        <template v-else-if="apiHandle.isSuccess.value">
+          <template v-if="updateInfo">
+            <p>{{ $t("updateDownloaded") }}</p>
+          </template>
+          <p v-else>{{ $t("alreadyUpdated") }}</p>
+          <p class="text-sm text-muted-foreground">
+            {{ $t("currentVersion", { version: appInfo!.version }) }}
+          </p>
+        </template>
+        <Status v-if="apiHandle.isError.value" variant="error">
+          {{ apiMsg }}
+        </Status>
+      </div>
+      <FadeTransition>
+        <RefreshCw
+          v-if="isCheckingForUpdate"
+          class="text-muted-foreground animate-spin"
+        />
+        <Button
+          v-else-if="!(apiHandle.isSuccess.value && !updateInfo)"
+          :class="{
+            'w-20 bg-opacity-15 text-foreground': apiHandle.isLoading.value,
+          }"
+          :disabled="apiHandle.isLoading.value"
+        >
+          {{
+            apiHandle.isLoading.value
+              ? `${updateDownloadPercentage}%`
+              : apiHandle.isSuccess.value && updateInfo
+                ? $t("instal&Restart")
+                : $t("download&Install")
+          }}
+        </Button>
+      </FadeTransition>
+    </section>
+
+    <div v-if="updateInfo">
+			<p class="text__h2 capitalize">{{ appInfo!.name }} v{{ updateInfo.version }}</p>
+      <p v-if="updateInfo.date" class="text-sm text-muted-foreground">
+        {{
+          humanizeDate(
+            parse(
+              updateInfo.date.replace(/:\d{2}$/, ""),
+              "yyyy-MM-dd HH:m:ss.SSS XXX",
+              new Date(),
+            ),
+          )
+        }}
+      </p>
+
+      <div v-if="updateInfo.body" class="mt-2">
+        <p class="font-medium text-sm mb-2">{{ $t("notes") }}</p>
+        <p>{{ updateInfo.body }}</p>
+      </div>
+    </div>
+  </div>
+</template>
+
+<script setup lang="ts">
+import { useApiHandle } from "~/_common/core/api/composables";
+import Status from "~/_common/components/Status.vue";
+import { RefreshCw } from "lucide-vue-next";
+import { parse } from "date-fns";
+
+import { humanizeDate } from "~/_common/utils";
+import FadeTransition from "~/_common/components/transitions/FadeTransition.vue";
+
+import { useSettingsStore } from "../_store";
+
+const store = useSettingsStore();
+const {
+  updateDownloadApiStatus: apiStatus,
+  updateDownloadApiMsg: apiMsg,
+  update: updateInfo,
+	appInfo,
+  updateDownloadProgress,
+} = storeToRefs(store);
+const apiHandle = useApiHandle(apiStatus);
+
+const isCheckingForUpdate = computed<boolean>(() => {
+  return apiHandle.isLoading.value && updateInfo.value === null;
+});
+
+const updateDownloadPercentage = computed<number>(() => {
+  return Math.floor((updateDownloadProgress.value ?? 0) * 100);
+});
+</script>
