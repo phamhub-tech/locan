@@ -1,7 +1,6 @@
 {
   "$schema": "https://schema.tauri.app/config/2",
   "productName": "Locan",
-	"mainBinaryName": "Locan",
   "version": "0.1.7",
   "identifier": "Locan",
   "build": {
