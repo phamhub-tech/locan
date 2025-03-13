@@ -1,8 +1,9 @@
 {
   "$schema": "https://schema.tauri.app/config/2",
-  "productName": "locan",
+  "productName": "Locan",
+	"mainBinaryName": "Locan",
   "version": "0.1.7",
-  "identifier": "com.phamhub.locan",
+  "identifier": "Locan",
   "build": {
     "beforeDevCommand": "pnpm dev",
     "devUrl": "http://localhost:5000",
