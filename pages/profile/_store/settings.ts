@@ -46,6 +46,9 @@ interface IState extends ISettings {
 	updateSizeDownloaded: number | null;
 	updateDownloadProgress: number | null;
 	updateDownloadMsg: string;
+
+	updateAppApiStatus: TApiStatus;
+	updateAppApiMsg: string;
 }
 
 const storeStorageKey = 'settings'
@@ -75,6 +78,9 @@ const state = (): IState => {
 		updateSizeDownloaded: null,
 		updateDownloadProgress: null,
 		updateDownloadMsg: '',
+
+		updateAppApiStatus: TApiStatus.default,
+		updateAppApiMsg: '',
 	}
 }
 
@@ -169,9 +175,9 @@ export const useSettingsStore = defineStore('settings', {
 					return;
 				};
 
-				console.log(
-					`found update ${update.available} ${update.version} from ${update.date} with notes ${update.body}`,
-				);
+				//console.log(
+				//	`found update ${update.available} ${update.version} from ${update.date} with notes ${update.body}`,
+				//);
 
 				let contentLength = 0;
 				await update.download((event) => {
@@ -202,8 +208,18 @@ export const useSettingsStore = defineStore('settings', {
 			const update = this.update;
 			if (update === null) return;
 
-			await update.install()
-			await relaunch()
+			try {
+				this.updateAppApiStatus = TApiStatus.loading;
+				this.updateAppApiMsg = '';
+
+				await update.install()
+
+				this.updateAppApiStatus = TApiStatus.success;
+				await relaunch()
+			} catch (e) {
+				this.updateAppApiStatus = TApiStatus.error;
+				this.updateAppApiMsg = getApiMessage(e);
+			}
 		},
 
 		resetSettings() {

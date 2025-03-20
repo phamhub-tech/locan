@@ -10,7 +10,7 @@ export default defineNuxtConfig({
 	ssr: false,
 	app: {
 		head: {
-			titleTemplate: '%s | Cluzar'
+			titleTemplate: '%s | Locan'
 		}
 	},
 	hooks: {

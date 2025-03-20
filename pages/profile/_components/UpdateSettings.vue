@@ -40,36 +40,46 @@
             {{ $t("currentVersion", { version: appInfo!.version }) }}
           </p>
         </template>
-        <Status v-if="apiHandle.isError.value" variant="error">
+        <Status v-if="apiHandle.isError.value" variant="error" @retry="actOnUpdate">
           {{ apiMsg }}
         </Status>
       </div>
       <FadeTransition>
-        <RefreshCw
-          v-if="isCheckingForUpdate"
-          class="text-muted-foreground animate-spin"
-        />
-        <Button
-          v-else-if="!(apiHandle.isSuccess.value && !updateInfo)"
-          :class="{
-            'w-20 bg-opacity-15 text-foreground': apiHandle.isLoading.value,
-          }"
-          :disabled="apiHandle.isLoading.value"
-					@click="actOnUpdate"
-        >
-          {{
-            apiHandle.isLoading.value
-              ? `${updateDownloadPercentage}%`
-              : apiHandle.isSuccess.value && updateInfo
-                ? $t("install&Restart")
-                : $t("download&Install")
-          }}
-        </Button>
+        <template v-if="!apiHandle.isError.value">
+          <RefreshCw
+            v-if="isCheckingForUpdate"
+            class="text-muted-foreground animate-spin"
+          />
+          <Button
+            v-else-if="!(apiHandle.isSuccess.value && !updateInfo)"
+            :class="{
+              'w-20 bg-opacity-15 text-foreground': apiHandle.isLoading.value,
+            }"
+            :disabled="apiHandle.isLoading.value"
+            :loading="updateApiHandle.isLoading.value"
+            @click="actOnUpdate"
+          >
+            {{
+              apiHandle.isLoading.value
+                ? `${updateDownloadPercentage}%`
+                : apiHandle.isSuccess.value && updateInfo
+                  ? $t("install&Restart")
+                  : $t("download&Install")
+            }}
+          </Button>
+          <Button v-else @click="store.checkAndDownloadUpdate()">
+            {{ $t("checkForUpdate") }}
+          </Button>
+        </template>
       </FadeTransition>
     </section>
 
     <section v-if="updateInfo">
-			<p class="text__h2"><span class="capitalize">{{ appInfo!.name }}</span> v{{ updateInfo.version }}</p>
+      <p class="text__h2">
+        <span class="capitalize">{{ appInfo!.name }}</span> v{{
+          updateInfo.version
+        }}
+      </p>
       <p v-if="updateInfo.date" class="text-sm text-muted-foreground">
         {{
           humanizeDate(
@@ -106,10 +116,12 @@ const {
   updateDownloadApiStatus: apiStatus,
   updateDownloadApiMsg: apiMsg,
   update: updateInfo,
-	appInfo,
+  updateAppApiStatus,
+  appInfo,
   updateDownloadProgress,
 } = storeToRefs(store);
 const apiHandle = useApiHandle(apiStatus);
+const updateApiHandle = useApiHandle(updateAppApiStatus);
 
 const isCheckingForUpdate = computed<boolean>(() => {
   return apiHandle.isLoading.value && updateInfo.value === null;
@@ -119,7 +131,12 @@ const updateDownloadPercentage = computed<number>(() => {
   return Math.floor((updateDownloadProgress.value ?? 0) * 100);
 });
 
-function actOnUpdate() {
-	store.updateApp()
+async function actOnUpdate() {
+  if (apiHandle.isSuccess.value && updateInfo.value) {
+    store.updateApp();
+    return;
+  }
+
+  await store.checkAndDownloadUpdate();
 }
 </script>
