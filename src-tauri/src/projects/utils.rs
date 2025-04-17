@@ -1,6 +1,8 @@
 use std::path::Path;
 use std::fs;
 
+
+
 pub fn detect_framework(root_dir: &str) -> Option<String> {
     let path = Path::new(root_dir);
 
@@ -10,6 +12,16 @@ pub fn detect_framework(root_dir: &str) -> Option<String> {
     if next_config.exists() || next_config_ts.exists() {
         return Some("nextjs".to_string());
     }
+
+		// React Native detection
+		let package_json = path.join("package.json");
+		if package_json.exists() {
+			if let Ok(content) = fs::read_to_string(&package_json) {
+				if content.contains("\"react-native\"") {
+					return Some("react-native".to_string());
+				}
+			}
+		}
 
     // Nuxt.js detection
     let nuxt_config = path.join("nuxt.config.ts");

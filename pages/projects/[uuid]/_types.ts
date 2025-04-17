@@ -23,6 +23,5 @@ export enum TFileType {
   ts = "typescript",
   json = "json",
   toml = "toml",
-  "react-native" = "react-native",
 	unknown = "unknown",
 }

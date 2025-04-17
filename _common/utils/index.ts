@@ -46,9 +46,16 @@ export class Debouncer {
 	 * Debounces the `callback` that is passed in
 	 */
 	run(callback: () => void) {
-		if (this._timer !== null) window.clearTimeout(this._timer)
-
+		this.cancel()
 		this._timer = window.setTimeout(callback, this._timeout)
+	}
+	
+	/**
+	 * Cancels the current timer
+	 */
+	cancel() {
+		if (this._timer !== null) window.clearTimeout(this._timer)
+		this._timer = null;
 	}
 }
 

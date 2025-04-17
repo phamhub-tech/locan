@@ -4,8 +4,8 @@
   * {
     @apply border-border;
 
-    &:focus-visible {
-      @apply outline-none ring ring-primary/50 #{!important};
+    &:focus-visible:not(.no-focus) {
+      @apply outline-none ring ring-ring #{!important};
     }
   }
 

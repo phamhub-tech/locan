@@ -30,6 +30,7 @@ pub fn run() {
             projects::api::get_projects,
             projects::api::get_project,
             projects::api::save_project_settings,
+            projects::api::detect_project_framework,
             scanner::api::get_project_scans,
             scanner::api::scan_project,
             settings::api::get_settings,

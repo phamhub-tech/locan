@@ -12,6 +12,9 @@ export const projectsService = {
 	addProject(payload: IProjectAddPayload) {
 		return api.invoke<IProjectShallowJson>('add_project', payload)
 	},
+	detectFramework(rootDir: string) {
+		return api.invoke<string>('detect_project_framework', { rootDir })
+	},
 	getProject(uuid: string) {
 		return api.invoke<TProjectResponse>('get_project', { uuid })
 	},

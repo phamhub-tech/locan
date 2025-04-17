@@ -16,6 +16,15 @@ export const Frameworks: IProjectFramework[] = [
     }
   },
   {
+    id: 'react-native',
+    name: 'React Native',
+    icon: '/icons/jsx.svg',
+    settings: {
+      ignorePatterns: ['android/build/*', 'ios/build/*', 'node_modules/*'],
+      useGitignore: true
+    }
+  },
+  {
     id: 'nuxtjs',
     name: 'Nuxt.js',
     icon: '/icons/vue.svg',

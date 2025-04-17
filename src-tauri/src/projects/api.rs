@@ -55,18 +55,11 @@ pub fn add_project(
     let conn_guard = db.conn.lock().map_err(|e| api_error!(e.to_string()))?;
     let conn = &*conn_guard;
 
-    let final_framework_id = if framework_id == "auto" {
-        let detected_framework = detect_framework(&root_dir);
-        detected_framework.unwrap_or_else(|| "other".to_string())
-    } else {
-        framework_id
-    };
-
     let mut project = Project {
         uuid: Uuid::new_v4().to_string(),
         name,
         root_dir,
-        framework_id: final_framework_id,
+        framework_id,
         created_at: Utc::now(),
         updated_at: Utc::now(),
         ..Default::default()
@@ -82,4 +75,10 @@ pub fn save_project_settings(
 ) -> Result<ApiResponse<String>, ApiError> {
     ProjectScanSettings::save(&root_dir, &new_settings).map_err(|e| api_error!(e.to_string()))?;
     Ok(api_response!("Settings saved".to_string()))
+}
+
+#[tauri::command]
+pub fn detect_project_framework(root_dir: String) -> Result<ApiResponse<String>, ApiError> {
+    let framework_id = detect_framework(&root_dir).unwrap_or_else(|| "other".to_string());
+    Ok(api_response!(framework_id))
 }

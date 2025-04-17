@@ -20,6 +20,9 @@ interface IState {
   projectsApiMsg: string;
   projects: ProjectShallowModel[] | null;
 
+  detectFrameworkApiStatus: TApiStatus;
+  detectFrameworkApiMsg: string;
+
   addProjectApiStatus: TApiStatus;
   addProjectApiMsg: string;
 
@@ -45,6 +48,9 @@ const state = (): IState => ({
   projectsApiMsg: "",
   projects: null,
 
+  detectFrameworkApiStatus: TApiStatus.default,
+  detectFrameworkApiMsg: "",
+
   addProjectApiStatus: TApiStatus.default,
   addProjectApiMsg: "",
 
@@ -68,6 +74,21 @@ const state = (): IState => ({
 export const useProjectsStore = defineStore("projects", {
   state,
   actions: {
+    async detectFramework(rootDir: string) {
+      try {
+        this.detectFrameworkApiStatus = TApiStatus.loading;
+        this.detectFrameworkApiMsg = "";
+
+        const { data } = await projectsService.detectFramework(rootDir);
+
+        this.detectFrameworkApiStatus = TApiStatus.success;
+        return data;
+      } catch (e) {
+        this.detectFrameworkApiStatus = TApiStatus.error;
+        this.detectFrameworkApiMsg = getApiMessage(e);
+        return "other";
+      }
+    },
     async getProjects() {
       try {
         this.projectsApiStatus = TApiStatus.loading;
@@ -95,8 +116,8 @@ export const useProjectsStore = defineStore("projects", {
         if (settingsJson == null) {
           // If no project settings exist, pick select settings from the global settings
           const store = useSettingsStore();
-					await store.getSettings();
-					const globalSettings = store.settings?.scan;
+          await store.getSettings();
+          const globalSettings = store.settings?.scan;
 
           settings = ProjectSettingsModel.fromJson({
             merge_settings: true,
@@ -121,18 +142,18 @@ export const useProjectsStore = defineStore("projects", {
         this.addProjectApiMsg = "";
 
         // Get framework settings if available
-        const framework = Frameworks.find(f => f.id === payload.frameworkId);
+        const framework = Frameworks.find((f) => f.id === payload.frameworkId);
         const settings = framework?.settings;
 
         const { data } = await projectsService.addProject(payload);
         const project = ProjectShallowModel.fromJson(data);
-        
+
         // Apply framework settings if available
         if (settings) {
           await this.saveSettings(project.rootDir, {
             merge_settings: true,
             ignore_patterns: settings.ignorePatterns,
-            use_gitignore: settings.useGitignore
+            use_gitignore: settings.useGitignore,
           });
         }
 
