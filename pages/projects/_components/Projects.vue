@@ -4,6 +4,7 @@
       <thead>
         <tr>
           <th>{{ $t("name") }}</th>
+          <th>{{ $t("framework") }}</th>
           <th>{{ $t("loc") }}</th>
           <th>{{ $t("files", 2) }}</th>
           <th>{{ $t("scanned") }}</th>
@@ -36,8 +37,14 @@
               <td>
                 <p class="font-semibold">
                   {{ project.name }}
-								</p>
-								<p class="text-muted-foreground text-xs">{{  project.rootDir }}</p>
+                </p>
+                <p class="text-muted-foreground text-xs">{{ project.rootDir }}</p>
+              </td>
+              <td class="!text-left">
+                <div class="flex items-center gap-2">
+                  <img :src="getFrameworkIcon(project)" :alt="getFrameworkName(project)" class="w-5 h-5" />
+                  <span>{{ getFrameworkName(project) }}</span>
+                </div>
               </td>
               <td>{{ project.loc ?? "-" }}</td>
               <td>{{ project.files ?? "-" }}</td>
@@ -46,7 +53,7 @@
             </tr>
           </template>
           <tr v-else>
-            <td colspan="4" class="text-center text-sm text-muted-foreground italic">
+            <td colspan="6" class="text-center text-sm text-muted-foreground italic">
               {{ $t("noProjects") }}
             </td>
           </tr>
@@ -57,8 +64,6 @@
 </template>
 
 <script setup lang="ts">
-import { format } from "date-fns";
-
 import { TextLoader } from "~/_common/components/loaders/text";
 import { useApiHandle } from "~/_common/core/api/composables";
 import Status from "~/_common/components/Status.vue";
@@ -66,6 +71,8 @@ import { getRouteName, humanizeDate } from "~/_common/utils";
 import { FadeTransition } from "~/_common/components/transitions";
 
 import { useProjectsStore } from "../_store/projects";
+import { Frameworks } from "../_models/project-framework/types";
+import type { ProjectShallowModel } from "../_models/project";
 
 const store = useProjectsStore();
 const {
@@ -85,6 +92,16 @@ function gotoProject(uuid: string) {
     name: getRouteName("project-details"),
     params: { uuid },
   });
+}
+
+function getFrameworkIcon(project: ProjectShallowModel): string {
+  const framework = Frameworks.find(f => f.id === project.frameworkId);
+  return framework?.icon ?? '/icons/unknown.svg';
+}
+
+function getFrameworkName(project: ProjectShallowModel): string {
+  const framework = Frameworks.find(f => f.id === project.frameworkId);
+  return framework?.name ?? 'Other';
 }
 </script>
 

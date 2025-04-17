@@ -67,5 +67,8 @@
 	"excludePattern": "Exclude pattern",
 	"addItem": "Add item",
 	"created": "Created",
-	"home": "Home"
+	"home": "Home",
+	"framework": "Framework",
+	"selectFramework": "Select a framework",
+	"autoDetect": "Auto-detect"
 }

@@ -7,6 +7,7 @@ use uuid::Uuid;
 
 use super::models::Project;
 use super::types::ProjectResponse;
+use super::utils::detect_framework;
 
 use crate::api::{ApiError, ApiResponse};
 use crate::db::DBConnection;
@@ -49,14 +50,23 @@ pub fn add_project(
     db: State<DBConnection>,
     name: String,
     root_dir: String,
+    framework_id: String,
 ) -> Result<ApiResponse<Project>, ApiError> {
     let conn_guard = db.conn.lock().map_err(|e| api_error!(e.to_string()))?;
     let conn = &*conn_guard;
+
+    let final_framework_id = if framework_id == "auto" {
+        let detected_framework = detect_framework(&root_dir);
+        detected_framework.unwrap_or_else(|| "other".to_string())
+    } else {
+        framework_id
+    };
 
     let mut project = Project {
         uuid: Uuid::new_v4().to_string(),
         name,
         root_dir,
+        framework_id: final_framework_id,
         created_at: Utc::now(),
         updated_at: Utc::now(),
         ..Default::default()

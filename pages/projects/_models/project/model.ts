@@ -6,6 +6,7 @@ import {
 	type IProjectShallowJson,
 	type IProject
 } from "./types";
+import { Frameworks } from "../project-framework/types";
 
 export class ProjectBase extends BaseModel implements IProjectBase {
 	public name: string;
@@ -14,6 +15,8 @@ export class ProjectBase extends BaseModel implements IProjectBase {
 	public files: number | null;
 	public scans: number | null;
 	public lastScan: Date | null;
+	public frameworkId: string;
+
 	constructor(data: IProjectBase) {
 		super(data)
 
@@ -23,6 +26,7 @@ export class ProjectBase extends BaseModel implements IProjectBase {
 		this.files = data.files
 		this.scans = data.scans
 		this.lastScan = data.lastScan
+		this.frameworkId = data.frameworkId
 	}
 
 	protected static buildData(json: IProjectBaseJson): IProjectBase {
@@ -33,7 +37,8 @@ export class ProjectBase extends BaseModel implements IProjectBase {
 			loc: json.loc,
 			files: json.files,
 			scans: json.scans,
-			lastScan: json.last_scan ? new Date(json.last_scan) : null
+			lastScan: json.last_scan ? new Date(json.last_scan) : null,
+			frameworkId: json.framework_id ?? Frameworks.find(f => f.id === "other")!.id,
 		}
 	}
 
@@ -46,6 +51,7 @@ export class ProjectBase extends BaseModel implements IProjectBase {
 			files: this.files,
 			scans: this.scans,
 			last_scan: this.lastScan?.toISOString() ?? null,
+			framework_id: this.frameworkId,
 		}
 	}
 }

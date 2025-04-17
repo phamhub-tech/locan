@@ -1,0 +1,1 @@
+ALTER TABLE Project ADD COLUMN framework_id TEXT NOT NULL DEFAULT '';

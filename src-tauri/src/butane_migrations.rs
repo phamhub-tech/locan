@@ -1039,6 +1039,436 @@ pub fn get_migrations() -> Result<MemMigrations, butane::Error> {
       "down": {
         "sqlite": "ALTER TABLE ScanFile\nRENAME TO ScanFileType;\n"
       }
+    },
+    "20250417_154400150_add_framework_id": {
+      "name": "20250417_154400150_add_framework_id",
+      "db": {
+        "tables": {
+          "Project": {
+            "name": "Project",
+            "columns": [
+              {
+                "name": "uuid",
+                "sqltype": {
+                  "KnownId": {
+                    "Ty": "Text"
+                  }
+                },
+                "nullable": false,
+                "pk": true,
+                "auto": false,
+                "unique": true,
+                "default": null
+              },
+              {
+                "name": "name",
+                "sqltype": {
+                  "KnownId": {
+                    "Ty": "Text"
+                  }
+                },
+                "nullable": false,
+                "pk": false,
+                "auto": false,
+                "unique": true,
+                "default": null
+              },
+              {
+                "name": "root_dir",
+                "sqltype": {
+                  "KnownId": {
+                    "Ty": "Text"
+                  }
+                },
+                "nullable": false,
+                "pk": false,
+                "auto": false,
+                "unique": false,
+                "default": null
+              },
+              {
+                "name": "framework_id",
+                "sqltype": {
+                  "KnownId": {
+                    "Ty": "Text"
+                  }
+                },
+                "nullable": false,
+                "pk": false,
+                "auto": false,
+                "unique": false,
+                "default": null
+              },
+              {
+                "name": "loc",
+                "sqltype": {
+                  "KnownId": {
+                    "Ty": "Int"
+                  }
+                },
+                "nullable": true,
+                "pk": false,
+                "auto": false,
+                "unique": false,
+                "default": null
+              },
+              {
+                "name": "files",
+                "sqltype": {
+                  "KnownId": {
+                    "Ty": "Int"
+                  }
+                },
+                "nullable": true,
+                "pk": false,
+                "auto": false,
+                "unique": false,
+                "default": null
+              },
+              {
+                "name": "scans",
+                "sqltype": {
+                  "KnownId": {
+                    "Ty": "Int"
+                  }
+                },
+                "nullable": true,
+                "pk": false,
+                "auto": false,
+                "unique": false,
+                "default": null
+              },
+              {
+                "name": "last_scan",
+                "sqltype": {
+                  "KnownId": {
+                    "Ty": "Timestamp"
+                  }
+                },
+                "nullable": true,
+                "pk": false,
+                "auto": false,
+                "unique": false,
+                "default": null
+              },
+              {
+                "name": "created_at",
+                "sqltype": {
+                  "KnownId": {
+                    "Ty": "Timestamp"
+                  }
+                },
+                "nullable": false,
+                "pk": false,
+                "auto": false,
+                "unique": false,
+                "default": null
+              },
+              {
+                "name": "updated_at",
+                "sqltype": {
+                  "KnownId": {
+                    "Ty": "Timestamp"
+                  }
+                },
+                "nullable": false,
+                "pk": false,
+                "auto": false,
+                "unique": false,
+                "default": null
+              }
+            ]
+          },
+          "ScanFile": {
+            "name": "ScanFile",
+            "columns": [
+              {
+                "name": "id",
+                "sqltype": {
+                  "KnownId": {
+                    "Ty": "Int"
+                  }
+                },
+                "nullable": false,
+                "pk": true,
+                "auto": true,
+                "unique": false,
+                "default": null
+              },
+              {
+                "name": "scan",
+                "sqltype": {
+                  "KnownId": {
+                    "Ty": "Int"
+                  }
+                },
+                "nullable": false,
+                "pk": false,
+                "auto": false,
+                "unique": false,
+                "default": null,
+                "reference": {
+                  "Literal": {
+                    "table_name": "ScanResult",
+                    "column_name": "id"
+                  }
+                }
+              },
+              {
+                "name": "extension",
+                "sqltype": {
+                  "KnownId": {
+                    "Ty": "Text"
+                  }
+                },
+                "nullable": false,
+                "pk": false,
+                "auto": false,
+                "unique": false,
+                "default": null
+              },
+              {
+                "name": "file_type",
+                "sqltype": {
+                  "KnownId": {
+                    "Ty": "Text"
+                  }
+                },
+                "nullable": false,
+                "pk": false,
+                "auto": false,
+                "unique": false,
+                "default": null
+              },
+              {
+                "name": "loc",
+                "sqltype": {
+                  "KnownId": {
+                    "Ty": "Int"
+                  }
+                },
+                "nullable": false,
+                "pk": false,
+                "auto": false,
+                "unique": false,
+                "default": null
+              },
+              {
+                "name": "files",
+                "sqltype": {
+                  "KnownId": {
+                    "Ty": "Int"
+                  }
+                },
+                "nullable": false,
+                "pk": false,
+                "auto": false,
+                "unique": false,
+                "default": null
+              },
+              {
+                "name": "created_at",
+                "sqltype": {
+                  "KnownId": {
+                    "Ty": "Timestamp"
+                  }
+                },
+                "nullable": false,
+                "pk": false,
+                "auto": false,
+                "unique": false,
+                "default": null
+              }
+            ]
+          },
+          "ScanFileType": {
+            "name": "ScanFileType",
+            "columns": [
+              {
+                "name": "id",
+                "sqltype": {
+                  "KnownId": {
+                    "Ty": "Int"
+                  }
+                },
+                "nullable": false,
+                "pk": true,
+                "auto": true,
+                "unique": false,
+                "default": null
+              },
+              {
+                "name": "scan",
+                "sqltype": {
+                  "KnownId": {
+                    "Ty": "Int"
+                  }
+                },
+                "nullable": false,
+                "pk": false,
+                "auto": false,
+                "unique": false,
+                "default": null,
+                "reference": {
+                  "Literal": {
+                    "table_name": "ScanResult",
+                    "column_name": "id"
+                  }
+                }
+              },
+              {
+                "name": "extension",
+                "sqltype": {
+                  "KnownId": {
+                    "Ty": "Text"
+                  }
+                },
+                "nullable": false,
+                "pk": false,
+                "auto": false,
+                "unique": false,
+                "default": null
+              },
+              {
+                "name": "file_type",
+                "sqltype": {
+                  "KnownId": {
+                    "Ty": "Text"
+                  }
+                },
+                "nullable": false,
+                "pk": false,
+                "auto": false,
+                "unique": false,
+                "default": null
+              },
+              {
+                "name": "loc",
+                "sqltype": {
+                  "KnownId": {
+                    "Ty": "Int"
+                  }
+                },
+                "nullable": false,
+                "pk": false,
+                "auto": false,
+                "unique": false,
+                "default": null
+              },
+              {
+                "name": "files",
+                "sqltype": {
+                  "KnownId": {
+                    "Ty": "Int"
+                  }
+                },
+                "nullable": false,
+                "pk": false,
+                "auto": false,
+                "unique": false,
+                "default": null
+              },
+              {
+                "name": "created_at",
+                "sqltype": {
+                  "KnownId": {
+                    "Ty": "Timestamp"
+                  }
+                },
+                "nullable": false,
+                "pk": false,
+                "auto": false,
+                "unique": false,
+                "default": null
+              }
+            ]
+          },
+          "ScanResult": {
+            "name": "ScanResult",
+            "columns": [
+              {
+                "name": "id",
+                "sqltype": {
+                  "KnownId": {
+                    "Ty": "Int"
+                  }
+                },
+                "nullable": false,
+                "pk": true,
+                "auto": true,
+                "unique": false,
+                "default": null
+              },
+              {
+                "name": "project",
+                "sqltype": {
+                  "KnownId": {
+                    "Ty": "Text"
+                  }
+                },
+                "nullable": false,
+                "pk": false,
+                "auto": false,
+                "unique": false,
+                "default": null,
+                "reference": {
+                  "Literal": {
+                    "table_name": "Project",
+                    "column_name": "uuid"
+                  }
+                }
+              },
+              {
+                "name": "loc",
+                "sqltype": {
+                  "KnownId": {
+                    "Ty": "Int"
+                  }
+                },
+                "nullable": false,
+                "pk": false,
+                "auto": false,
+                "unique": false,
+                "default": null
+              },
+              {
+                "name": "files",
+                "sqltype": {
+                  "KnownId": {
+                    "Ty": "Int"
+                  }
+                },
+                "nullable": false,
+                "pk": false,
+                "auto": false,
+                "unique": false,
+                "default": null
+              },
+              {
+                "name": "scanned_at",
+                "sqltype": {
+                  "KnownId": {
+                    "Ty": "Timestamp"
+                  }
+                },
+                "nullable": false,
+                "pk": false,
+                "auto": false,
+                "unique": false,
+                "default": null
+              }
+            ]
+          }
+        },
+        "extra_types": {}
+      },
+      "from": "20250216_171747873_rename_scan_file_type",
+      "up": {
+        "sqlite": "ALTER TABLE Project ADD COLUMN framework_id TEXT NOT NULL DEFAULT '';\n"
+      },
+      "down": {
+        "sqlite": "CREATE TABLE Project__butane_tmp (\n\"uuid\" TEXT NOT NULL PRIMARY KEY UNIQUE,\n\"name\" TEXT NOT NULL UNIQUE,\nroot_dir TEXT NOT NULL,\nloc INTEGER,\n\"files\" INTEGER,\nscans INTEGER,\nlast_scan TEXT,\ncreated_at TEXT NOT NULL,\nupdated_at TEXT NOT NULL\n);\nINSERT INTO Project__butane_tmp SELECT \"uuid\", \"name\", root_dir, loc, \"files\", scans, last_scan, created_at, updated_at FROM Project;\nDROP TABLE Project;\nALTER TABLE Project__butane_tmp RENAME TO Project;\n"
+      }
     }
   },
   "current": {
@@ -1051,7 +1481,7 @@ pub fn get_migrations() -> Result<MemMigrations, butane::Error> {
     "up": {},
     "down": {}
   },
-  "latest": "20250216_171747873_rename_scan_file_type"
+  "latest": "20250417_154400150_add_framework_id"
 }"#;
     MemMigrations::from_json(json)
 }

@@ -12,6 +12,7 @@ export type TProjectResponse = {
 export interface IProjectAddPayload {
 	name: string;
 	rootDir: string;
+	frameworkId: string;
 }
 
 export interface IProjectScansResponse {

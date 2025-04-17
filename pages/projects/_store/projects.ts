@@ -13,6 +13,7 @@ import {
   type IProjectSettingsJson,
 } from "../_models/project-settings";
 import { useSettingsStore } from "~/pages/profile/_store";
+import { Frameworks } from "../_models/project-framework/types";
 
 interface IState {
   projectsApiStatus: TApiStatus;
@@ -119,8 +120,22 @@ export const useProjectsStore = defineStore("projects", {
         this.addProjectApiStatus = TApiStatus.loading;
         this.addProjectApiMsg = "";
 
+        // Get framework settings if available
+        const framework = Frameworks.find(f => f.id === payload.frameworkId);
+        const settings = framework?.settings;
+
         const { data } = await projectsService.addProject(payload);
         const project = ProjectShallowModel.fromJson(data);
+        
+        // Apply framework settings if available
+        if (settings) {
+          await this.saveSettings(project.rootDir, {
+            merge_settings: true,
+            ignore_patterns: settings.ignorePatterns,
+            use_gitignore: settings.useGitignore
+          });
+        }
+
         if (this.projects === null) {
           this.projects = [project];
         } else {

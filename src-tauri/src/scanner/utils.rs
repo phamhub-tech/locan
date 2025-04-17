@@ -25,9 +25,17 @@ pub fn get_extension_from_path(path: &str) -> Option<String> {
 
 /// Return the file type from the file name
 pub fn file_type_from_file_name(name: &str) -> String {
+    // Check for React Native specific files first
+    if name.contains("react-native") {
+        match name {
+            "tsx" => return "react-native".to_string(),
+            "jsx" => return "react-native".to_string(),
+            _ => {}
+        }
+    }
+
     match name {
         "env" | "env.example" => "env",
-
         "css" => "css",
         "dart" => "dart",
         "gradle" => "gradle",

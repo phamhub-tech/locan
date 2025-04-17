@@ -7,6 +7,7 @@ export interface IProjectBaseJson extends IBaseModelJson {
 	files: number | null
 	scans: number | null
 	last_scan: string | null
+	framework_id?: string
 }
 export interface IProjectBase extends IBaseModel {
 	name: string
@@ -15,6 +16,7 @@ export interface IProjectBase extends IBaseModel {
 	scans: number | null
 	files: number | null
 	lastScan: Date | null
+	frameworkId: string
 }
 
 export interface IProjectShallowJson extends IProjectBaseJson { }

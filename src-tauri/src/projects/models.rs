@@ -12,6 +12,7 @@ pub struct Project {
     #[unique]
     pub name: String,
     pub root_dir: String,
+    pub framework_id: String,
     pub loc: Option<i32>,
     pub files: Option<i16>,
     pub scans: Option<i16>,
